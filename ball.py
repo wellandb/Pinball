@@ -28,7 +28,7 @@ class ball(pygame.sprite.Sprite):
         self.rect.x += self.xVel
         self.rect.y += self.yVel
         if self.yVel < 10:
-            self.yVel += 0.327 # gravity Based off of tick rate
+            self.yVel += 0.3 # gravity Based off of tick rate
 
     def changeDirection(self, newX, newY):
         self.xVel = newX
