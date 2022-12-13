@@ -1,5 +1,6 @@
 from settings import *
 from trail import *
+import math
 
 # Ball class
 class ball(pygame.sprite.Sprite):
@@ -15,6 +16,7 @@ class ball(pygame.sprite.Sprite):
         self.trails = []
 
     def draw(self):
+        print(self.getDirection)
         pygame.draw.circle(win, self.colour ,[self.rect.x, self.rect.y], self.radius)
         self.tick += 1
         if self.tick == 3:
@@ -33,6 +35,9 @@ class ball(pygame.sprite.Sprite):
     def changeDirection(self, newX, newY):
         self.xVel = newX
         self.yVel = newY
+    
+    def getDirection(self):
+        return math.tan(self.rect.y/self.rect.x) # Doesn't return Angle
 
     def trail(self):
         self.trails.append(trail(blue, [self.rect.x-(self.xVel*2), self.rect.y-(self.yVel*2)], [self.rect.x, self.rect.y]))
