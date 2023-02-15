@@ -7,7 +7,7 @@ import math
 from boardGeneration import *
 
 def redrawGameWindow():
-    win.fill(black)
+    win.fill(BLACK)
     for i in pegs:
        i.draw()
     for i in balls:
@@ -26,6 +26,10 @@ def mouseClick():
     ballY = mouse[1]
     return ballX, ballY
 
+# save parameters to file
+f = open("parameter_log.txt", "a")
+
+# First loop to get starting parameters
 run = True
 while run:
 
@@ -36,8 +40,10 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
+        # if mous click then set ball start position
         elif event.type == pygame.MOUSEBUTTONDOWN:
             ballX, ballY = mouseClick()
+            f.write(str(ballX) +  " "  + str(ballY))
             run = False
     
     pygame.display.update()
@@ -49,7 +55,7 @@ def mouseClick2():
     ballYVel = (mouse[1] - ballY)*weight
     return ballXVel, ballYVel
     
-
+# second loop to get the ball velocity
 while not run:
     clock.tick(30)
 
@@ -60,19 +66,25 @@ while not run:
             run = True
         elif event.type == pygame.MOUSEBUTTONDOWN:
             ballXVel, ballYVel = mouseClick2()
+            f.write(" " + str(ballXVel) + " " + str(ballYVel) + "\n")
             run = True
 
-    win.fill(black)
+    win.fill(BLACK)
     for i in pegs:
         i.draw()
-    pygame.draw.circle(win, white, [ballX, ballY], 5)
-    pygame.draw.line(win, white, [ballX, ballY], mouse)
+    pygame.draw.circle(win, WHITE, [ballX, ballY], 5)
+    pygame.draw.line(win, WHITE, [ballX, ballY], mouse)
     
     pygame.display.update()
 
+# close the file
+f.close()
+
+# create ball
 balls = pygame.sprite.Group()
 balls.add(ball(ballX, ballY, ballXVel, ballYVel)) # x, y, xVel, yVel: ALL NEED TO BE CHOSEN EACH RUN AT START
 
+log = open("route_tracker.txt", "a")
 #mainloop
 run = True
 while run:
@@ -86,10 +98,13 @@ while run:
     keys = pygame.key.get_pressed()
 
     # COLLISION CHECK
-    for i in balls:
-        ballPegCollision(i, pegs)
+    for i in balls:      
+        log.write(ballPegCollision(i, pegs))
     ballWallCollision(balls)
 
     redrawGameWindow()
 
+
+log.write("\n")
+log.close()
 pygame.quit()

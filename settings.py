@@ -1,21 +1,23 @@
 #import pygame and random generator
-import pygame, random, sys, math
+import pygame, random, sys, math, numpy as np
 # initialise pygame
 pygame.init()
 
 # intialise some colours
-red = (255, 0, 0)
-blue = (0, 0, 255)
-green = (0, 255, 0)
-black = (0,0,0)
-white = (255,255,255)
+RED = (255, 0, 0)
+BLUE = (0, 0, 255)
+GREEN = (0, 255, 0)
+BLACK = (0,0,0)
+WHITE = (255,255,255)
+LIGHT_GRAY = (240, 240, 240)
+DARK_GRAY = (128, 128, 128)
 
 #window
 screenWidth = 1200
 screenHeight = 600
 screen = (screenWidth,screenHeight)
 win = pygame.display.set_mode(screen)
-win.fill(black)
+win.fill(BLACK)
 
 # text set up
 pygame.font.init()

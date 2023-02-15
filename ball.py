@@ -10,7 +10,7 @@ class ball(pygame.sprite.Sprite):
         self.rect = pygame.Rect(x, y, 5, 5)
         self.xVel = xVel
         self.yVel = yVel
-        self.colour = white
+        self.colour = WHITE
         self.radius = 5
         self.tick = 0
         self.trails = []
@@ -40,4 +40,4 @@ class ball(pygame.sprite.Sprite):
         return math.tan(self.rect.y/self.rect.x) # Doesn't return Angle
 
     def trail(self):
-        self.trails.append(trail(blue, [self.rect.x-(self.xVel*2), self.rect.y-(self.yVel*2)], [self.rect.x, self.rect.y]))
+        self.trails.append(trail(BLUE, [self.rect.x-(self.xVel*2), self.rect.y-(self.yVel*2)], [self.rect.x, self.rect.y]))
