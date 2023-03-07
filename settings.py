@@ -1,5 +1,5 @@
 #import pygame and random generator
-import pygame, random, sys, math, numpy as np
+import pygame, random, sys, math, cmath, numpy as np
 # initialise pygame
 pygame.init()
 

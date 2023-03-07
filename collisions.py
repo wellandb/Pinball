@@ -4,6 +4,7 @@ def ballPegCollision(ball, pegs):
     log = ""
     #peg_hit_list = pygame.sprite.spritecollide(ball, pegs, False)
     # GET RELATIVE POSITION OF BALL
+    # Treat peg like hex or octogon so that you can have multiple different trajectories off the pin but still keep it predictable and replicable
     for i in pegs:
         if pygame.sprite.collide_circle(ball, i):
             if (ball.rect.x < i.rect.x and ball.xVel > 0) or (ball.rect.x > i.rect.x and ball.xVel < 0):
