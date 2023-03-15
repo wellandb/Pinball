@@ -50,12 +50,23 @@ def main(line = -1):
     if angle < 180:
         clockwise = True
 
+    x_avg = 0
+    y_avg = 0
+    for x,y in pegs:
+        x_avg += x
+        y_avg += y
+    x_avg = x_avg/len(pegs)
+    y_avg = y_avg/len(pegs)
+        
     # depth
     # need number from 5 to 20
+    
+    depth = 5 + len(pegs)
 
     # scale
     # need numnber from 1.05 to 2
     # also needs to be related to depth so large depth has small scale and vice versa
+    scale = 1 + len(pegs)/len(vels)
 
     # random colour: true/false
 

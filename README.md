@@ -12,3 +12,4 @@ smooter interaction with fractal
 
 extra:
 paddles?
+add dalle-2 / ai fractal art

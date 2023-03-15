@@ -17,7 +17,7 @@ class paddle(pygame.sprite.Sprite):
         self.rect = pygame.Rect(x,y,width,height)
 
     def draw(self):
-        pygame.draw.rect(win, red, self.rect)
+        pygame.draw.rect(win, RED, self.rect)
 
     def move(self):
         if self.xMove >= self.maxX:

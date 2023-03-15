@@ -1,4 +1,5 @@
 from settings import *
+from shape import *
 
 def to_pixels(x,y):
     return(screenWidth/2 + screenWidth * x/20, screenHeight/2 - screenHeight * y/20)
@@ -140,7 +141,8 @@ def fractal_poly(angle, clockwise, depth, scale, random, poly, poly_list):
     else:
         fractal_poly(angle, clockwise, depth - 1, scale, random, p, poly_list)
 
-
+def create_fractal(shape, angle, clockwise, depth, scale, random_colour):
+    pass
 
 
 def redrawGameWindow(polys, segments):
@@ -173,13 +175,13 @@ def main():
 
 
     #polys.append(draw_poly(win, star(1), BLACK))
-    polys.append(draw_poly(win, square, BLUE))
+    #polys.append(draw_poly(win, square, BLUE))
     #polys.append(draw_poly(win, triangle, RED))
 
     # Fractal
-    #fractal_poly(50, True, 15, 1.33, True, [BLACK, star(1)])
-    fractal_poly(35, True, 15, 1.2, False, [BLUE, square, random_state()], polys)
-    #fractal_poly(26, True, 4, 5, True, [RED, triangle])
+    fractal_poly(50, True, 15, 1.33, False, [BLACK, star(1), random_state()], polys)
+    #fractal_poly(35, True, 15, 1.2, False, [BLUE, square, random_state()], polys)
+    #fractal_poly(26, True, 4, 5, True, [RED, triangle, random_state()])
 
 
     done = False
@@ -211,7 +213,7 @@ def main():
 
         
         # check that shapes aren't too small/big and then remove all that are too big/small to improve performance
-        polys = check_polys(polys, square)
+        polys = check_polys(polys, star(1))
         # redraw the window
         redrawGameWindow(polys, segments)
 
