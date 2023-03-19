@@ -35,39 +35,10 @@ def draw_segment(win, v1, v2, colour):
     pygame.draw.line(win, colour, to_pixels(*v1), to_pixels(*v2), 2)
     return [colour, v1, v2]
 
-def rotate_poly(poly, angle, clockwise):
-    points = []
-    for i in poly:
-        if clockwise:
-            x = math.cos(math.radians(angle))*i[0] - math.sin(math.radians(angle)) * i[1]
-            y = math.sin(math.radians(angle))*i[0] + math.cos(math.radians(angle))*i[1]
-        else:
-            x = math.cos(math.radians(angle))*i[0] + math.sin(math.radians(angle)) * i[1]
-            y = - math.sin(math.radians(angle))*i[0] + math.cos(math.radians(angle))*i[1]
-        points.append((x,y))
-    return points
-
-def scale_poly(poly, scale):
-    points = []
-    for i in poly:
-        x = scale * i[0]
-        y = scale * i[1]
-        points.append((x,y))
-    return points
-
-def translate_poly(poly, xMove, yMove):
-    points = []
-    for i in poly:
-        x = i[0] + xMove
-        y = i[1] + yMove
-        points.append((x,y))
-    return points
-
-
 def random_colour():
     return (random.randint(0,255),random.randint(0,255),random.randint(0,255))
 
-def update_colour(colour, change = 20, state = random_state()):
+def update_colour(colour, change, state):
     # make sure no number goes out of index
     for i in range(3):
         if colour[i] + change > 255 and state[i] == "u":
@@ -89,7 +60,7 @@ def update_colour(colour, change = 20, state = random_state()):
     else:
         b = colour[2] - change
     
-    return (r, g, b), state
+    return (r, g, b)
     
 
 def Area(poly):
@@ -103,75 +74,98 @@ def Area(poly):
     area = abs(area) / 2.0
     return area
 
-# check if shapes are not needed to be shown and then removes them to speed up frctal and stop choppy effect
-def check_polys(polys, shape):
-    screenArea = Area([0,[from_pixels(0,0), from_pixels(0,screenHeight), from_pixels(screenWidth,screenHeight), from_pixels(screenWidth,0)]])
-    for i in range(len(polys)):
-        if Area(polys[i]) > 1600:
-            polys.append(draw_poly(win, shape, polys[i][0], polys[i][2]))
-            polys.remove(polys[i])
-        if Area(polys[i]) < Area([0, shape]) * 0.75:
-            polys.append(draw_poly(win, scale_poly(shape, math.sqrt(screenArea / Area([0, shape]))), polys[i][0]))
-            polys.remove(polys[i])
-    return polys
-
-# checks that all veticies are offscreen
-def offscreen(points):
-    off = True
-    for a,b in points:
-        x, y = to_pixels(a,b)
-        if  x > 0 and y > 0 and x < screenWidth and y < screenHeight:
-            off = False
-    return off
-
-# also could add symetry
-def fractal_poly(angle, clockwise, depth, scale, random, poly, poly_list):
-    # recreate poly at an angle
-    # Update colour, scale poly by 2, rotate poly by angle
-    #polys.append([update_colour(polys[-1][0]),scale_poly(rotate_poly(polys[-1][1], angle, clockwise),2)])
-    # Random Colour
-    if random:
-        p = [random_colour(),scale_poly(rotate_poly(poly[1], angle, clockwise),scale), random_state()]
+def create_fractal(shape, angle, clockwise, depth, scale, colour, state, change):
+    fractal = []
+    if shape[0]:
+        regular, frac_shape, sides = True, shape[1], shape[2]
     else:
-        p = [update_colour(poly[0], 5, poly[2])[0], scale_poly(rotate_poly(poly[1], angle, clockwise),scale), poly[2]]
+        regular, frac_shape = False, shape[1]
+    clr = colour
+    scl = scale
+    clk = True
+    for i in range(0,depth):
+        print("Creating: ", i/depth*100, "%")
+        delete = False
+        if regular:
+            x = frac_shape(clr, sides)
+        else:
+            x = frac_shape(clr)
+        x.rotate_poly(angle, clockwise)
+        if x.scale_poly(scale):
+            delete = True
+        x.set_state(state)
+        x.set_clockwise(clk)
+        if not delete:
+            fractal.append(x)
+        scale *= scl
+        print('scale = ', scale)
+        clr = update_colour(clr, change, state)
+        clk = not(clk)
+    return fractal
 
-    poly_list.append(p)
-    if depth == 1 or Area(poly) > 1600:
-        return
-    else:
-        fractal_poly(angle, clockwise, depth - 1, scale, random, p, poly_list)
 
-def create_fractal(shape, angle, clockwise, depth, scale, random_colour):
-    pass
-
-
-def redrawGameWindow(polys, segments):
+def redrawGameWindow(polys, segments, shapes):
+    print('bkg')
     win.fill(WHITE)
+    print('grid')
     draw_grid(win)
+    print('segs')
     for segment in segments:
         draw_segment(win, segment[1], segment[2], segment[0])
+    print('poly sort')
     polys.sort(reverse = True, key=Area)
+    print('poly')
     for poly in polys:
         draw_poly(win, poly[1], poly[0])
+        print('shape sort')
+    # To make it look better
+    win.fill(BLACK)
+    shapes.sort(reverse= True, key=lambda x: x.get_area())
+    print('shapes')
+    for shape in shapes:
+        print(shape.get_area())
+        shape.draw(win)
+    print('update')
     pygame.display.update()
 
-def main():
+def main(regular, sides, angle, clockwise, depth, scale, clr, state, change):
+    print("Fractal creation")
     segments = []
     polys = []
+    shapes = []
 
     # draw triangle in middle of screen
-    triangle = [(1,1), (-1,1), (-1,-1)]
-    square = [(1,1), (1,-1), (-1,-1), (-1,1)]
+    # triangle = [(1,1), (-1,1), (-1,-1)]
+    # square = [(1,1), (1,-1), (-1,-1), (-1,1)]
+    # triangle = Triangle
+    # square = Square
+    # star = Star
+    # polygon = Polygon
+    irregular_shapes = [Star]
+    # shape = pos_shapes[shape % len(pos_shapes)]
+    regular_shape = Polygon
+    if regular:
+        shape = (True, Polygon, 3+sides%13)
+    else:
+        shape = (False, irregular_shapes[sides%len(irregular_shapes)])
 
-    def star(r):
-        pp = []
-        for k in range(5):
-            pp.append(((r*math.cos(2*math.pi*k/5+math.pi/2)),𝑟*(math.sin(2*math.pi*k/5+math.pi/2))))
-            pp.append(((r/2*math.cos(2*math.pi*k/5+math.pi/2)),𝑟/2*(math.sin(2*math.pi*k/5+math.pi/2))))
-        return pp
+    angle = 20
+    clockwise = True
+    rotation = 1
+
+    # shapes.append(star)
+    shapes = create_fractal(shape, angle, clockwise, depth, scale, clr, state, change)
+    # shapes = create_fractal(star, 20, True, 10, 1.2, (146, 231, 56), 'udu', 3)
+    print("fractal created")
+    # def star(r):
+    #     pp = []
+    #     for k in range(5):
+    #         pp.append(((r*math.cos(2*math.pi*k/5+math.pi/2)),𝑟*(math.sin(2*math.pi*k/5+math.pi/2))))
+    #         pp.append(((r/2*math.cos(2*math.pi*k/5+math.pi/2)),𝑟/2*(math.sin(2*math.pi*k/5+math.pi/2))))
+    #     return pp
 
     # shapes
-    shapes = [triangle, square, star(1)]
+    # shapes = [triangle, square, star]
 
 
     #polys.append(draw_poly(win, star(1), BLACK))
@@ -179,11 +173,11 @@ def main():
     #polys.append(draw_poly(win, triangle, RED))
 
     # Fractal
-    fractal_poly(50, True, 15, 1.33, False, [BLACK, star(1), random_state()], polys)
+    # fractal_poly(50, True, 19, 1.2, False, [GREEN, star(1), "uuu"], polys)
     #fractal_poly(35, True, 15, 1.2, False, [BLUE, square, random_state()], polys)
     #fractal_poly(26, True, 4, 5, True, [RED, triangle, random_state()])
 
-
+    print("running")
     done = False
     while not done:
         clock.tick(30)
@@ -192,6 +186,7 @@ def main():
             if event.type == pygame.QUIT:
                 done = True
         
+        print('keys')
         # Interaction with fractal
         keys = pygame.key.get_pressed()
 
@@ -203,19 +198,25 @@ def main():
             scale = 1
 
         # Create changes to the fractal
-        for i in range(len(polys)):
-            # change colour based on what is stored by that shape
-            new_colour, new_state = update_colour(polys[i][0], 1, polys[i][2])
-            # rotate and scale new points
-            new_points = scale_poly(rotate_poly(polys[i][1], 5, True), scale)
-            # update polygons
-            polys[i] = [new_colour, new_points, new_state]
+        # for i in range(len(polys)):
+        #     # change colour based on what is stored by that shape
+        #     new_colour, new_state = update_colour(polys[i][0], 1, polys[i][2])
+        #     # rotate and scale new points
+        #     new_points = scale_poly(rotate_poly(polys[i][1], 5, True), scale)
+        #     # update polygons
+        #     polys[i] = [new_colour, new_points, new_state]
+
+        for s in shapes:
+            print('r')
+            s.rotate_poly(rotation, s.get_clockwise())
+            print('u')
+            s.update_colour(3)
+            print('s')
+            s.scale_poly(scale)
 
         
         # check that shapes aren't too small/big and then remove all that are too big/small to improve performance
-        polys = check_polys(polys, star(1))
+        # polys = check_polys(polys, star(1))
         # redraw the window
-        redrawGameWindow(polys, segments)
-
-main()
-pygame.quit()
+        print('red')
+        redrawGameWindow(polys, segments, shapes)

@@ -7,8 +7,6 @@ def ballPegCollision(ball, pegs):
     # Treat peg like hex or octogon so that you can have multiple different trajectories off the pin but still keep it predictable and replicable
     for i in pegs:
         if pygame.sprite.collide_circle(ball, i):
-            
-
             # Work out angle of incident and deflection using lines through the circles
             angle = math.degrees(math.atan(float(ball.xVel)/float(ball.yVel)))
             if angle < 0:
@@ -51,8 +49,10 @@ def ballWallCollision(balls):
             i.xVel = i.xVel * (-1)
         if i.rect.y >= screenHeight:
             i.kill()
+            return True
         elif i.rect.y <= 0:
             i.yVel = i.yVel * (-1)
+    return False
 
 def ballPaddleCollision():
     pass

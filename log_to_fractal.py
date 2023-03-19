@@ -5,6 +5,7 @@ def mean_angle(angles):
     return math.degrees(cmath.phase(sum(cmath.rect(1, math.radians(a)) for a in angles)/len(angles)))
 
 def main(line = -1):
+    print("Log to fractal")
     file = open("route_tracker.txt", "r")
     lines = file.read().splitlines()
     fractal_line = lines[line].split()
@@ -15,9 +16,9 @@ def main(line = -1):
 
     for i in range(len(fractal_line)):
         if i%4 == 0:
-            pegs.append([fractal_line[i],fractal_line[i+1]])
+            pegs.append([float(fractal_line[i]),float(fractal_line[i+1])])
         if i%4 == 2:
-            vels.append([fractal_line[i],fractal_line[i+1]])
+            vels.append([float(fractal_line[i]),float(fractal_line[i+1])])
 
     print("pegs = ", pegs,"\n vels =", vels)
 
@@ -31,9 +32,9 @@ def main(line = -1):
     #for i in range(len(shapes)):
     #    if pegs % len(shapes) == i:
     #        shape = i
-    shape = 0
-    # COLOUR
-    # need to choose 3 numbers from 0-255
+    regular = True
+    shape = 3 + len(pegs) % 10
+    
 
     # ANGLE
     # work out average angle of ball and use that, bearing from positive x & y which in pygame is right and down respecively, then taken counter clockwise as y has been switched so should bearing rotation
@@ -57,6 +58,14 @@ def main(line = -1):
         y_avg += y
     x_avg = x_avg/len(pegs)
     y_avg = y_avg/len(pegs)
+
+    # COLOUR
+    # need to choose 3 numbers from 0-255
+    r = (int(x_avg)^2) % 256
+    g = (int(y_avg)^2) % 256
+    b = (int((x_avg+y_avg)/2)^2) % 256
+
+    colour = (r, g, b)
         
     # depth
     # need number from 5 to 20
@@ -70,4 +79,12 @@ def main(line = -1):
 
     # random colour: true/false
 
-    fractals.main()
+    state = "udu"
+    # change needs to be from 4-60
+    change = 10 + int(x_avg**2 * y_avg**2) % 50
+    depth = 19
+    scale = 1.2
+
+    print("Fractal creation: shape, angle, clockwise, depth, scale, colour, state, change")
+    print(shape, angle, clockwise, depth, scale, colour, state, change)
+    fractals.main(regular, shape, angle, clockwise, depth, scale, colour, state, change)

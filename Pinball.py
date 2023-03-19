@@ -5,6 +5,7 @@ from peg import *
 from collisions import *
 import math
 from boardGeneration import *
+import log_to_fractal
 
 def redrawGameWindow():
     win.fill(BLACK)
@@ -100,11 +101,13 @@ while run:
     # COLLISION CHECK
     for i in balls:      
         log.write(ballPegCollision(i, pegs))
-    ballWallCollision(balls)
+    if ballWallCollision(balls):
+        run = False
 
     redrawGameWindow()
 
 
 log.write("\n")
 log.close()
+log_to_fractal.main()
 pygame.quit()

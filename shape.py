@@ -7,15 +7,25 @@ def to_pixels(x,y):
 def from_pixels(x, y):
     return(20*x/screenWidth - 10, 10 - 20 * y/screenHeight)
 
-class shape(pygame.sprite.Sprite):
+def random_state():
+    s = ""
+    for i in range(3):
+        if random.randint(0,1) == 0:
+            s += "u"
+        else:
+            s += "d"
+    return s
+
+class Shape(pygame.sprite.Sprite):
     
-    def __init__(self, x, y, colour):
+    def __init__(self,colour):
         super().__init__()
-        self.x = x
-        self.y = y
+        # self.x = x
+        # self.y = y
         self.colour = colour
         self.points = []
-        self.state = self.random_state()
+        self.state = random_state()
+        self.clockwise = True
     
     def get_points(self):
         return self.points
@@ -34,16 +44,22 @@ class shape(pygame.sprite.Sprite):
     
     def set_state(self, new_state):
         self.state = new_state
+    
+    def get_clockwise(self):
+        return self.clockwise
+
+    def set_clockwise(self, bool_val):
+        self.clockwise = bool_val
 
     def rotate_poly(self, angle, clockwise):
         points = []
         for i in self.points:
             if clockwise:
                 x = math.cos(math.radians(angle))*i[0] - math.sin(math.radians(angle)) * i[1]
-                y = math.sin(math.radians(angle))*i[0] + math.cos(math.radians(angle))*i[1]
+                y = math.sin(math.radians(angle))*i[0] + math.cos(math.radians(angle)) * i[1]
             else:
                 x = math.cos(math.radians(angle))*i[0] + math.sin(math.radians(angle)) * i[1]
-                y = - math.sin(math.radians(angle))*i[0] + math.cos(math.radians(angle))*i[1]
+                y = - math.sin(math.radians(angle))*i[0] + math.cos(math.radians(angle))* i[1]
             points.append((x,y))
         self.points = points
 
@@ -53,7 +69,12 @@ class shape(pygame.sprite.Sprite):
             x = scale * i[0]
             y = scale * i[1]
             points.append((x,y))
-        self.points = points
+        self.set_points(points)
+        print(self.get_area(), 20*20, self.points)
+        if self.get_area() > 20*20:
+            print('too big')
+            return True
+        return False
 
     def translate_poly(self, xMove, yMove):
         points = []
@@ -63,42 +84,34 @@ class shape(pygame.sprite.Sprite):
             points.append((x,y))
         self.points = points
 
-    def random_state(self):
-        s = ""
-        for i in range(3):
-            if random.randint(0,1) == 0:
-                s += "u"
-            else:
-                s += "d"
-        return s
-
 
     def random_colour(self):
         return (random.randint(0,255),random.randint(0,255),random.randint(0,255))
 
-    def update_colour(self, colour, change = 20, state = random_state()):
+    def update_colour(self, change = 20):
         # make sure no number goes out of index
         for i in range(3):
-            if colour[i] + change > 255 and state[i] == "u":
-                state = state[:i] + "d" + state[i+1:]
-            elif colour[i] - change < 0 and state[i] == "d":
-                state = state[:i] + "u" + state[i+1:]
+            if self.colour[i] + change > 255 and self.state[i] == "u":
+                self.state = self.state[:i] + "d" + self.state[i+1:]
+            elif self.colour[i] - change < 0 and self.state[i] == "d":
+                self.state = self.state[:i] + "u" + self.state[i+1:]
 
         # update colour
-        if state[0] == "u":
-            r = colour[0] + change
+        if self.state[0] == "u":
+            r = self.colour[0] + change
         else:
-            r = colour[0] - change
-        if state[1] == "u":
-            g = colour[1] + change
+            r = self.colour[0] - change
+        if self.state[1] == "u":
+            g = self.colour[1] + change
         else:
-            g = colour[1] - change
-        if state[2] == "u":
-            b = colour[2] + change
+            g = self.colour[1] - change
+        if self.state[2] == "u":
+            b = self.colour[2] + change
         else:
-            b = colour[2] - change
+            b = self.colour[2] - change
         
-        return (r, g, b), state
+        self.colour = (r, g, b)
+        
 
     def get_area(self):
         corners = self.points
@@ -112,26 +125,31 @@ class shape(pygame.sprite.Sprite):
         return area
 
     def draw(self, win):
-        pass
+        print('drawing', self.points)
+        pixel_points = [to_pixels(x,y) for x,y in self.points]
+        pygame.draw.polygon(win, self.colour, pixel_points)
         
 
-class triangle(shape):
+class Triangle(Shape):
 
-    def __init__(self):
-        super().__init__()
-        self.points = [(1,1), (-1,1), (-1,-1)]
+    def __init__(self, colour):
+        super().__init__(colour)
+        self.points = [(1,1), (-1,1), (0,-1)]
+        self.base_points = self.points
 
-class square(shape):
+class Square(Shape):
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, colour):
+        super().__init__(colour)
         self.points = [(1,1), (1,-1), (-1,-1), (-1,1)]
+        self.base_points = self.points
 
-class star(shape):
+class Star(Shape):
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, colour):
+        super().__init__(colour)
         self.points = self.base(1)
+        self.base_points = self.base(1)
 
     def base(self, r):
         pp = []
@@ -139,3 +157,21 @@ class star(shape):
             pp.append(((r*math.cos(2*math.pi*k/5+math.pi/2)),𝑟*(math.sin(2*math.pi*k/5+math.pi/2))))
             pp.append(((r/2*math.cos(2*math.pi*k/5+math.pi/2)),𝑟/2*(math.sin(2*math.pi*k/5+math.pi/2))))
         return pp
+    
+class Polygon(Shape):
+
+    def rotate(self, radius, angle):
+        # points is a tuple
+        new_points = (radius*math.cos(angle), radius*math.sin(angle))
+        return new_points
+
+
+    def __init__(self, colour, sides):
+        super().__init__(colour)
+        org_angle = 2*math.pi/sides
+        radius = 1
+        for i in range(sides):
+            angle = org_angle*i
+            self.points.append(self.rotate(radius, angle))
+            print(self.points)
+            

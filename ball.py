@@ -16,7 +16,6 @@ class ball(pygame.sprite.Sprite):
         self.trails = []
 
     def draw(self):
-        print(self.getDirection)
         pygame.draw.circle(win, self.colour ,[self.rect.x, self.rect.y], self.radius)
         self.tick += 1
         if self.tick == 3:

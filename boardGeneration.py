@@ -19,7 +19,13 @@ def drawDiamond(p):
     drawLine(p, 20, [screenWidth/2, screenHeight], [0, screenHeight/2])
     drawLine(p, 20, [screenWidth/2, screenHeight], [screenWidth, screenHeight/2])
 
+def board1():
+    for j in range(5):
+        drawLine(pegs, 15-(abs(2-j)*2), [150 + abs(2-j)*50, 200+ 50*j], [screenWidth-(150 + abs(2-j)*50), 200+ 50*j])
+    
+    drawDiamond(pegs)
+
 for j in range(5):
     drawLine(pegs, 15-(abs(2-j)*2), [150 + abs(2-j)*50, 200+ 50*j], [screenWidth-(150 + abs(2-j)*50), 200+ 50*j])
-    
+
 drawDiamond(pegs)
