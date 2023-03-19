@@ -51,7 +51,7 @@ while run:
 
 
 def mouseClick2():
-    weight = 5/math.sqrt((mouse[0]-ballX)**2 + (mouse[1] - ballY)**2)
+    weight = 10/math.sqrt((mouse[0]-ballX)**2 + (mouse[1] - ballY)**2)
     ballXVel = (mouse[0]-ballX)*weight
     ballYVel = (mouse[1] - ballY)*weight
     return ballXVel, ballYVel
