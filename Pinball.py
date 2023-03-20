@@ -7,7 +7,7 @@ import math
 from boardGeneration import *
 import log_to_fractal
 
-def redrawGameWindow():
+def redrawGameWindow(balls):
     win.fill(BLACK)
     for i in pegs:
        i.draw()
@@ -16,98 +16,118 @@ def redrawGameWindow():
         i.move()
     pygame.display.update()
 
-# Initialization
 
-for i in pegs:
-    i.draw()
-    pygame.display.update()
+def main():
 
-def mouseClick():
-    ballX = mouse[0]
-    ballY = mouse[1]
-    return ballX, ballY
+    def mouseClick():
+        ballX = mouse[0]
+        ballY = mouse[1]
+        return ballX, ballY
 
-# save parameters to file
-f = open("parameter_log.txt", "a")
+    def mouseClick2():
+        weight = 10/math.sqrt((mouse[0]-ballX)**2 + (mouse[1] - ballY)**2)
+        ballXVel = (mouse[0]-ballX)*weight
+        ballYVel = (mouse[1] - ballY)*weight
+        return ballXVel, ballYVel
 
-# First loop to get starting parameters
-run = True
-while run:
+    # Initialization
+    win.fill(BLACK)
+    for i in pegs:
+        i.draw()
+        pygame.display.update()
 
-    clock.tick(30)
+    # save parameters to file
+    f = open("parameter_log.txt", "a")
 
-    mouse = pygame.mouse.get_pos()
+    # First loop to get starting parameters
+    run = True
+    while run:
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
-        # if mous click then set ball start position
-        elif event.type == pygame.MOUSEBUTTONDOWN:
+        clock.tick(30)
+
+        mouse = pygame.mouse.get_pos()
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_SPACE]:
             ballX, ballY = mouseClick()
             f.write(str(ballX) +  " "  + str(ballY))
             run = False
-    
-    pygame.display.update()
 
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+            # if mous click then set ball start position
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                ballX, ballY = mouseClick()
+                f.write(str(ballX) +  " "  + str(ballY))
+                run = False
+        
+        pygame.display.update()
 
-def mouseClick2():
-    weight = 10/math.sqrt((mouse[0]-ballX)**2 + (mouse[1] - ballY)**2)
-    ballXVel = (mouse[0]-ballX)*weight
-    ballYVel = (mouse[1] - ballY)*weight
-    return ballXVel, ballYVel
-    
-# second loop to get the ball velocity
-while not run:
-    clock.tick(30)
+        
+    # second loop to get the ball velocity
+    while not run:
+        clock.tick(30)
 
-    mouse = pygame.mouse.get_pos()
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = True
-        elif event.type == pygame.MOUSEBUTTONDOWN:
+        mouse = pygame.mouse.get_pos()
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_SPACE]:
             ballXVel, ballYVel = mouseClick2()
             f.write(" " + str(ballXVel) + " " + str(ballYVel) + "\n")
             run = True
 
-    win.fill(BLACK)
-    for i in pegs:
-        i.draw()
-    pygame.draw.circle(win, WHITE, [ballX, ballY], 5)
-    pygame.draw.line(win, WHITE, [ballX, ballY], mouse)
-    
-    pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = True
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                ballXVel, ballYVel = mouseClick2()
+                f.write(" " + str(ballXVel) + " " + str(ballYVel) + "\n")
+                run = True
 
-# close the file
-f.close()
+        win.fill(BLACK)
+        for i in pegs:
+            i.draw()
+        pygame.draw.circle(win, WHITE, [ballX, ballY], 5)
+        pygame.draw.line(win, WHITE, [ballX, ballY], mouse)
+        
+        pygame.display.update()
 
-# create ball
-balls = pygame.sprite.Group()
-balls.add(ball(ballX, ballY, ballXVel, ballYVel)) # x, y, xVel, yVel: ALL NEED TO BE CHOSEN EACH RUN AT START
+    # close the file
+    f.close()
 
-log = open("route_tracker.txt", "a")
-#mainloop
-run = True
-while run:
+    # create ball
+    balls = pygame.sprite.Group()
+    balls.add(ball(ballX, ballY, ballXVel, ballYVel)) # x, y, xVel, yVel: ALL NEED TO BE CHOSEN EACH RUN AT START
 
-    clock.tick(30)
+    log = open("route_tracker.txt", "a")
+    #mainloop
+    run = True
+    while run:
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+        clock.tick(30)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+
+        # keys = pygame.key.get_pressed()
+        # if keys[pygame.K_SPACE]:
+        #     pause= True
+        #     while pause:
+        #         leys = pygame.key.get_pressed()
+        #         if leys[pygame.K_SPACE]:
+        #             pause = False
+
+
+        # COLLISION CHECK
+        for i in balls:      
+            log.write(ballPegCollision(i, pegs))
+        if ballWallCollision(balls):
             run = False
 
-    keys = pygame.key.get_pressed()
-
-    # COLLISION CHECK
-    for i in balls:      
-        log.write(ballPegCollision(i, pegs))
-    if ballWallCollision(balls):
-        run = False
-
-    redrawGameWindow()
+        redrawGameWindow(balls)
 
 
-log.write("\n")
-log.close()
-log_to_fractal.main()
-pygame.quit()
+    log.write("\n")
+    log.close()
+    log_to_fractal.main()
+    pygame.quit()

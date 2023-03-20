@@ -1,5 +1,6 @@
 # Start the game have options for pinball, pinball with set start and then a fractal explorer
 import pygame, sys
+import Pinball, map_menu, fractal_interaction
 pygame.init()
 
 from settings import *
@@ -25,10 +26,9 @@ class Button(pygame.sprite.Sprite):
     def check_click(self, mouse):
         if self.rect.collidepoint(mouse):
             self.func()
-            print(self.func())
 
     def select(self):
-        self.func()
+        return self.func()
     
     def is_selected(self):
         self.colour = RED
@@ -37,14 +37,19 @@ class Button(pygame.sprite.Sprite):
         self.colour = BLUE
 
 def pinball():
-    print("interaction")
+    return "pinball"
+def map_Menu():
+    return "map_menu"
+def fractal_inter():
+    return "fractal interaction"
+
 
 def main():
 
     buttons = []
     buttons.append(Button(screenWidth* 1/4, 250, 100, 50, pinball))
-    buttons.append(Button(screenWidth* 2/4, 250, 100, 50, pinball))
-    buttons.append(Button(screenWidth* 3/4, 250, 100, 50, pinball))
+    buttons.append(Button(screenWidth* 2/4, 250, 100, 50, map_Menu))
+    buttons.append(Button(screenWidth* 3/4, 250, 100, 50, fractal_inter))
     buttons[0].is_selected()
     selection = 0
     menu = True
@@ -58,9 +63,9 @@ def main():
             if event.type == pygame.QUIT:
                 menu = False
             
-        if pygame.mouse.get_pressed():
-            for b in buttons:
-                b.check_click(pygame.mouse.get_pos())
+        # if pygame.mouse.get_pressed():
+        #     for b in buttons:
+        #         b.check_click(pygame.mouse.get_pos())
             
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
@@ -68,7 +73,9 @@ def main():
         if keys[pygame.K_RIGHT]:
             selection = (selection + 1) % len(buttons)
         if keys[pygame.K_SPACE]:
-            buttons[selection].select()
+            choice = buttons[selection].select()
+            menu = False
+            
 
         for i in buttons:
             if i == buttons[selection]:
@@ -86,5 +93,13 @@ def main():
         win.blit(smallfont.render('fractal', True, WHITE), (screenWidth* 3/4, 250))
 
         pygame.display.update()
+    return choice
 
-main()
+choice = main()
+print(choice)
+if choice == "pinball":
+    Pinball.main()
+elif choice == "map_menu":
+    map_menu.main()
+elif choice == "fractal interaction":
+    fractal_interaction.main()

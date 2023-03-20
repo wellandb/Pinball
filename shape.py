@@ -70,9 +70,7 @@ class Shape(pygame.sprite.Sprite):
             y = scale * i[1]
             points.append((x,y))
         self.set_points(points)
-        print(self.get_area(), 20*20, self.points)
         if self.get_area() > 20*20:
-            print('too big')
             return True
         return False
 
@@ -125,7 +123,6 @@ class Shape(pygame.sprite.Sprite):
         return area
 
     def draw(self, win):
-        print('drawing', self.points)
         pixel_points = [to_pixels(x,y) for x,y in self.points]
         pygame.draw.polygon(win, self.colour, pixel_points)
         
@@ -173,5 +170,4 @@ class Polygon(Shape):
         for i in range(sides):
             angle = org_angle*i
             self.points.append(self.rotate(radius, angle))
-            print(self.points)
             

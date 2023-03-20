@@ -84,7 +84,6 @@ def create_fractal(shape, angle, clockwise, depth, scale, colour, state, change)
     scl = scale
     clk = True
     for i in range(0,depth):
-        print("Creating: ", i/depth*100, "%")
         delete = False
         if regular:
             x = frac_shape(clr, sides)
@@ -98,45 +97,31 @@ def create_fractal(shape, angle, clockwise, depth, scale, colour, state, change)
         if not delete:
             fractal.append(x)
         scale *= scl
-        print('scale = ', scale)
         clr = update_colour(clr, change, state)
         clk = not(clk)
     return fractal
 
 
 def redrawGameWindow(polys, segments, shapes):
-    print('bkg')
     win.fill(WHITE)
-    print('grid')
     draw_grid(win)
-    print('segs')
     for segment in segments:
         draw_segment(win, segment[1], segment[2], segment[0])
-    print('poly sort')
     polys.sort(reverse = True, key=Area)
-    print('poly')
     for poly in polys:
         draw_poly(win, poly[1], poly[0])
-        print('shape sort')
     # To make it look better
     win.fill(BLACK)
     shapes.sort(reverse= True, key=lambda x: x.get_area())
-    print('shapes')
     for shape in shapes:
-        print(shape.get_area())
         shape.draw(win)
-    print('update')
     pygame.display.update()
 
 def main(regular, sides, angle, clockwise, depth, scale, clr, state, change):
-    print("Fractal creation")
     segments = []
     polys = []
     shapes = []
 
-    # draw triangle in middle of screen
-    # triangle = [(1,1), (-1,1), (-1,-1)]
-    # square = [(1,1), (1,-1), (-1,-1), (-1,1)]
     # triangle = Triangle
     # square = Square
     # star = Star
@@ -153,31 +138,10 @@ def main(regular, sides, angle, clockwise, depth, scale, clr, state, change):
     clockwise = True
     rotation = 1
 
-    # shapes.append(star)
     shapes = create_fractal(shape, angle, clockwise, depth, scale, clr, state, change)
     # shapes = create_fractal(star, 20, True, 10, 1.2, (146, 231, 56), 'udu', 3)
-    print("fractal created")
-    # def star(r):
-    #     pp = []
-    #     for k in range(5):
-    #         pp.append(((r*math.cos(2*math.pi*k/5+math.pi/2)),𝑟*(math.sin(2*math.pi*k/5+math.pi/2))))
-    #         pp.append(((r/2*math.cos(2*math.pi*k/5+math.pi/2)),𝑟/2*(math.sin(2*math.pi*k/5+math.pi/2))))
-    #     return pp
-
-    # shapes
-    # shapes = [triangle, square, star]
 
 
-    #polys.append(draw_poly(win, star(1), BLACK))
-    #polys.append(draw_poly(win, square, BLUE))
-    #polys.append(draw_poly(win, triangle, RED))
-
-    # Fractal
-    # fractal_poly(50, True, 19, 1.2, False, [GREEN, star(1), "uuu"], polys)
-    #fractal_poly(35, True, 15, 1.2, False, [BLUE, square, random_state()], polys)
-    #fractal_poly(26, True, 4, 5, True, [RED, triangle, random_state()])
-
-    print("running")
     done = False
     while not done:
         clock.tick(30)
@@ -186,7 +150,6 @@ def main(regular, sides, angle, clockwise, depth, scale, clr, state, change):
             if event.type == pygame.QUIT:
                 done = True
         
-        print('keys')
         # Interaction with fractal
         keys = pygame.key.get_pressed()
 
@@ -207,16 +170,12 @@ def main(regular, sides, angle, clockwise, depth, scale, clr, state, change):
         #     polys[i] = [new_colour, new_points, new_state]
 
         for s in shapes:
-            print('r')
             s.rotate_poly(rotation, s.get_clockwise())
-            print('u')
             s.update_colour(3)
-            print('s')
             s.scale_poly(scale)
 
         
         # check that shapes aren't too small/big and then remove all that are too big/small to improve performance
         # polys = check_polys(polys, star(1))
         # redraw the window
-        print('red')
         redrawGameWindow(polys, segments, shapes)

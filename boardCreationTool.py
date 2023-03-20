@@ -2,8 +2,7 @@ import pygame, random
 from settings import *
 
 def mouseClick():
-    pygame.draw.circle(win,red,mouse,7)
-    print(mouse)
+    pygame.draw.circle(win,RED,mouse,7)
 
 run = True
 while run:

@@ -1,14 +1,15 @@
 from settings import *
 import fractals
+import chatgpt_query
 
 def mean_angle(angles):
     return math.degrees(cmath.phase(sum(cmath.rect(1, math.radians(a)) for a in angles)/len(angles)))
 
 def main(line = -1):
-    print("Log to fractal")
     file = open("route_tracker.txt", "r")
     lines = file.read().splitlines()
     fractal_line = lines[line].split()
+    file.close()
 
     pegs = []
 
@@ -20,8 +21,6 @@ def main(line = -1):
         if i%4 == 2:
             vels.append([float(fractal_line[i]),float(fractal_line[i+1])])
 
-    print("pegs = ", pegs,"\n vels =", vels)
-
     # Fractal inputs
 
     # could make multiple shapes
@@ -32,7 +31,10 @@ def main(line = -1):
     #for i in range(len(shapes)):
     #    if pegs % len(shapes) == i:
     #        shape = i
-    regular = True
+    if len(pegs) < 3:
+        regular = False
+    else:
+        regular = True
     shape = 3 + len(pegs) % 10
     
 
@@ -84,7 +86,27 @@ def main(line = -1):
     change = 10 + int(x_avg**2 * y_avg**2) % 50
     depth = 19
     scale = 1.2
-
-    print("Fractal creation: shape, angle, clockwise, depth, scale, colour, state, change")
-    print(shape, angle, clockwise, depth, scale, colour, state, change)
+    
     fractals.main(regular, shape, angle, clockwise, depth, scale, colour, state, change)
+
+    chatgpt = open("to_chat.txt", 'a')
+
+    if regular:
+        reg = "using equillateral polygons with sides greater than 2 "
+    else:
+        reg = "using irregular shapes "
+    if clockwise:
+        clk = "rotating " + str(angle) + " clockwise "
+    else:
+        clk = "rotating " + str(angle) + " anticlockwise "
+    
+    d = "with depth " + str(depth)
+    s = "with scale " + str(scale)
+    cl = "using the colour " + str(colour) + " and changing the colour values by " + str(change)
+    question = "Create a fractal in pygame " + reg + clk + d + s + cl
+    chatgpt.write(question)
+    chatgpt.close()
+
+    chatgpt_query.main(question)
+
+
