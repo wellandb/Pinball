@@ -1,0 +1,1 @@
+Create a fractal in pygame using equillateral polygons with sides greater than 2 rotating 2.7315064928574366 clockwise with depth 19with scale 1.2using the colour (6, 141, 75) and changing the colour values by 56
