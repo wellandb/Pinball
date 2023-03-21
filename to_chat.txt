@@ -20,3 +20,17 @@ Create a fractal in pygame using equillateral polygons with sides greater than 2
 Create a fractal in pygame using equillateral polygons with sides greater than 2 rotating 23.566952762434603 clockwise  with depth 19 with scale 1.2using the colour (206, 4, 235) and changing the colour values by 57
 Create a fractal in pygame using irregular shapes rotating -30.49989117275892 clockwise  with depth 19 with scale 1.2using the colour (249, 248, 120) and changing the colour values by 10
 Create a fractal in pygame using irregular shapes rotating 1.2751269922618554e-14 clockwise  with depth 19 with scale 1.2using the colour (145, 184, 164) and changing the colour values by 16
+Create a fractal in pygame using equillateral polygons with sides greater than 2 rotating -4.55212473534624 clockwise  with depth 19 with scale 1.2using the colour (68, 3, 33) and changing the colour values by 25
+Create a fractal in pygame using equillateral polygons with sides greater than 2 rotating -0.7844016800881345 clockwise  with depth 19 with scale 1.2using the colour (155, 202, 51) and changing the colour values by 15
+Create a fractal in pygame using irregular shapes rotating 27.211540810580477 clockwise  with depth 19 with scale 1.2using the colour (236, 15, 127) and changing the colour values by 10
+Create a fractal in pygame using irregular shapes rotating 34.78946284242695 clockwise  with depth 19 with scale 1.2using the colour (74, 226, 150) and changing the colour values by 10
+Create a fractal in pygame using equillateral polygons with sides greater than 2 rotating 6.977463140505307 clockwise  with depth 19 with scale 1.2using the colour (239, 210, 93) and changing the colour values by 28
+Create a fractal in pygame using equillateral polygons with sides greater than 2 rotating -0.9225095787799322 clockwise  with depth 19 with scale 1.2using the colour (78, 248, 33) and changing the colour values by 35
+Create a fractal in pygame using equillateral polygons with sides greater than 2 rotating -3.6899511033493146e-15 clockwise  with depth 19 with scale 1.2using the colour (30, 130, 76) and changing the colour values by 29
+Create a fractal in pygame using irregular shapes rotating -14.654434379668148 clockwise  with depth 19 with scale 1.2using the colour (72, 133, 234) and changing the colour values by 10
+Create a fractal in pygame using irregular shapes rotating 0.0 clockwise  with depth 19 with scale 1.2using the colour (130, 92, 109) and changing the colour values by 10
+Create a fractal in pygame using equillateral polygons with sides greater than 2 rotating 6.366467646152455e-15 clockwise  with depth 19 with scale 1.2using the colour (210, 173, 189) and changing the colour values by 16
+Create a fractal in pygame using equillateral polygons with sides greater than 2 rotating 0.0 clockwise  with depth 19 with scale 1.2using the colour (164, 248, 82) and changing the colour values by 35
+Create a fractal in pygame using irregular shapes rotating -0.7287331656244218 clockwise  with depth 19 with scale 1.2using the colour (94, 248, 41) and changing the colour values by 32
+Create a fractal in pygame using irregular shapes rotating -0.30989082513749977 clockwise  with depth 19 with scale 1.2 using the colour (248, 182, 85) and changing the colour values by 19
+Create a fractal in pygame using irregular shapes rotating 6.4865251485059705 clockwise  with depth 19 with scale 1.2using the colour (198, 156, 179) and changing the colour values by 49

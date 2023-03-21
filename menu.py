@@ -4,9 +4,7 @@ import Pinball, map_menu, fractal_interaction
 import fractals
 import shape
 import time
-
-pygame.init()
-
+import boardGeneration
 from settings import *
 
 class Button(pygame.sprite.Sprite):
@@ -52,7 +50,7 @@ def main():
     # background
     # bkg = pygame.image.load("img/neon_L.jpg")
     # bkg_fit = pygame.transform.scale(bkg, (screenWidth,screenHeight))
-    shapes = fractals.create_fractal((False, shape.Star), 20, True, 19, 1.5, (255, 255, 255), 'uuu', 20)
+    shapes = fractals.create_fractal((False, shape.Star, 4), 20, True, 19, 1.5, (255, 255, 255), 'uuu', 20)
 
     buttons = []
     buttons.append(Button(screenWidth* 1/4 - 10, 225, 100, 50, pinball))
@@ -120,13 +118,14 @@ def main():
         win.blit(smallfont.render('fractal', True, WHITE), (screenWidth* 3/4, 250))
 
         pygame.display.update()
-    return choice
 
-choice = main()
-print(choice)
-if choice == "pinball":
-    Pinball.main()
-elif choice == "map_menu":
-    map_menu.main()
-elif choice == "fractal interaction":
-    fractal_interaction.main()
+    if choice == "pinball":
+        Pinball.main(boardGeneration.board3())
+    elif choice == "map_menu":
+        board = boardGeneration.board1()
+        Pinball.main(board)
+    elif choice == "fractal interaction":
+        fractal_interaction.main(False, 1, 20, True, 19, 1.5, (255, 255, 255), 'uuu', 20)
+
+main()
+pygame.quit()

@@ -42,4 +42,4 @@ class peg(pygame.sprite.Sprite):
 
 
     def draw(self):
-        pygame.draw.circle(win, self.colour ,[self.rect.x,self.rect.y], self.radius)
+        pygame.draw.circle(win, self.colour ,[self.rect.x + self.radius/2,self.rect.y+ self.radius/2], self.radius)

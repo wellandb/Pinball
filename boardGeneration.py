@@ -13,19 +13,37 @@ def drawLine(pegs, number, start, end):
 def drawShape(pegs, number, start, shape):
     pass
 
-def drawDiamond(p):
-    drawLine(p, 20, [screenWidth/2, 0], [0, screenHeight/2])
-    drawLine(p, 20, [screenWidth/2, 0], [screenWidth, screenHeight/2])
-    drawLine(p, 20, [screenWidth/2, screenHeight], [0, screenHeight/2])
-    drawLine(p, 20, [screenWidth/2, screenHeight], [screenWidth, screenHeight/2])
+def drawDiamond(p,width, height, x, y):
+    number = int(math.sqrt((width/2)**2+(height/2)**2)/30)
+    drawLine(p, number, [x, y], [x+width/2, y+height/2])
+    drawLine(p, number, [x+width/2, y+height/2], [x+width, y])
+    drawLine(p, number, [x+width, y], [x+width/2, y-height/2])
+    drawLine(p, number, [x+width/2, y-height/2], [x, y])
 
 def board1():
     for j in range(5):
         drawLine(pegs, 15-(abs(2-j)*2), [150 + abs(2-j)*50, 200+ 50*j], [screenWidth-(150 + abs(2-j)*50), 200+ 50*j])
     
-    drawDiamond(pegs)
+    drawDiamond(pegs, screenWidth, screenHeight, 0, screenHeight/2)
+    return pegs
 
-for j in range(5):
-    drawLine(pegs, 15-(abs(2-j)*2), [150 + abs(2-j)*50, 200+ 50*j], [screenWidth-(150 + abs(2-j)*50), 200+ 50*j])
+def board2():
+    for i in range(10):
+        for j in range(10):
+            drawLine(pegs, int(screenWidth/50), [20, 100+50*j], [screenWidth-20, 100+50*j])
+    return pegs
 
-drawDiamond(pegs)
+def board3():
+    width = screenWidth
+    height = screenHeight
+    for i in range(3):
+        drawDiamond(pegs,width,height, i*100, screenHeight/2)
+        width -= 200
+        height -= 200
+
+    return pegs
+
+def get_boards():
+    boards = []
+    boards.append(board1())
+    return boards

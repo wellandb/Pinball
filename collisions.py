@@ -30,7 +30,9 @@ def ballPegCollision(ball, pegs):
     for i in pegs:
         if ball.rect.colliderect(i):
             # Work out angle of incident and deflection using lines through the circles
-            angle = calculate_bearing(ball.rect.x, ball.rect.y, i.rect.x, i.rect.y)
+            ballx = ball.rect.x
+            bally = ball.rect.y 
+            angle = calculate_bearing(ballx, bally, i.rect.x, i.rect.y)
             print(angle)
             if ball.xVel > 0:
                 if ball.yVel > 0:
@@ -70,10 +72,10 @@ def ballPegCollision(ball, pegs):
 
 
             
-            if (ball.rect.x < i.rect.x and ball.xVel > 0) or (ball.rect.x > i.rect.x and ball.xVel < 0):
+            if (ballx < i.rect.x and ball.xVel > 0) or (ballx > i.rect.x and ball.xVel < 0):
                 log = log + str(i.rect.x) + " " + str(i.rect.y) + " " +  str(round(ball.xVel,3)) + " " +  str(round(ball.yVel,3)) + " "
                 ball.xVel = ball.xVel * (-1)       # CHANGE xVel and yVel depending on positions
-            elif (ball.rect.y < i.rect.y and ball.yVel > 0) or (ball.rect.y > i.rect.y and ball.yVel < 0):
+            elif (bally < i.rect.y and ball.yVel > 0) or (bally > i.rect.y and ball.yVel < 0):
                 log = log + str(i.rect.x) + " " +  str(i.rect.y) + " " +  str(round(ball.xVel,3)) + " " +  str(round(ball.yVel,3)) + " "
                 ball.yVel = ball.yVel * (-1)       # CHANGE xVel and yVel depending on positions
 

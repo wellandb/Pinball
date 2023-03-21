@@ -4,11 +4,11 @@ from paddle import *
 from peg import *
 from collisions import *
 import math
-from boardGeneration import *
+import boardGeneration
 import log_to_fractal
 import time
 
-def redrawGameWindow(bkg,balls):
+def redrawGameWindow(bkg,balls,pegs):
     win.fill(BLACK)
     win.blit(bkg, (0,0))
     for i in pegs:
@@ -19,8 +19,8 @@ def redrawGameWindow(bkg,balls):
     pygame.display.update()
 
 
-def main():
-
+def main(board):
+    pegs = board
     def mouseClick():
         ballX = mouse[0]
         ballY = mouse[1]
@@ -38,9 +38,9 @@ def main():
     bkg = pygame.image.load("img/neon_L.jpg")
     bkg_fit = pygame.transform.scale(bkg, (screenWidth,screenHeight))
     win.blit(bkg_fit, (0,0))
+
     for i in pegs:
         i.draw()
-        pygame.display.update()
 
     balls = pygame.sprite.Group()
     # save parameters to file
@@ -69,7 +69,7 @@ def main():
                 f.write(str(ballX) +  " "  + str(ballY))
                 run = False
         
-        redrawGameWindow(bkg_fit, balls)
+        redrawGameWindow(bkg_fit, balls, pegs)
         pygame.display.update()
 
         
@@ -94,7 +94,7 @@ def main():
 
         win.fill(BLACK)
 
-        redrawGameWindow(bkg_fit, balls)
+        redrawGameWindow(bkg_fit, balls, pegs)
         for i in pegs:
             i.draw()
         pygame.draw.circle(win, WHITE, [ballX, ballY], 5)
@@ -134,10 +134,9 @@ def main():
         if ballWallCollision(balls):
             run = False
 
-        redrawGameWindow(bkg_fit, balls)
+        redrawGameWindow(bkg_fit, balls,pegs)
 
 
     log.write("\n")
     log.close()
     log_to_fractal.main()
-    pygame.quit()

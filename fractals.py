@@ -76,10 +76,7 @@ def Area(poly):
 
 def create_fractal(shape, angle, clockwise, depth, scale, colour, state, change):
     fractal = []
-    if shape[0]:
-        regular, frac_shape, sides = True, shape[1], shape[2]
-    else:
-        regular, frac_shape = False, shape[1]
+    regular, frac_shape, sides = shape[0], shape[1], shape[2]
     clr = colour
     scl = scale
     clk = True
@@ -90,7 +87,7 @@ def create_fractal(shape, angle, clockwise, depth, scale, colour, state, change)
         if regular:
             x = frac_shape(clr, sides)
         else:
-            x = frac_shape(clr)
+            x = frac_shape(clr, sides)
         x.rotate_poly(angle, clockwise)
         x.reflect_poly(45)
         x.translate_poly(xMove, yMove)
@@ -141,13 +138,13 @@ def main(regular, sides, angle, clockwise, depth, scale, clr, state, change):
     # square = Square
     # star = Star
     # polygon = Polygon
-    irregular_shapes = [Star]
+    irregular_shapes = [Star, Irregular]
     # shape = pos_shapes[shape % len(pos_shapes)]
     regular_shape = Polygon
     if regular:
-        shape = (True, regular_shape, 3+sides%13)
+        shape = (True, regular_shape, 3+sides%6)
     else:
-        shape = (False, irregular_shapes[sides%len(irregular_shapes)])
+        shape = (False, irregular_shapes[sides%len(irregular_shapes)], sides)
 
     angle = 20
     clockwise = True

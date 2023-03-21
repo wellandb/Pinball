@@ -45,7 +45,7 @@ def main(line = -1):
 
     # regular = True, means that the shape created will be a equillateral polygon
     # regular = False, means that the shape will be chosen from the irregular shapes list
-    if len(pegs) < 3:
+    if len(pegs) % 2 == 1:
         regular = False
     else:
         regular = True
