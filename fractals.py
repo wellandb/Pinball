@@ -83,6 +83,8 @@ def create_fractal(shape, angle, clockwise, depth, scale, colour, state, change)
     clr = colour
     scl = scale
     clk = True
+    xMove = 0
+    yMove = 0
     for i in range(0,depth):
         delete = False
         if regular:
@@ -90,6 +92,8 @@ def create_fractal(shape, angle, clockwise, depth, scale, colour, state, change)
         else:
             x = frac_shape(clr)
         x.rotate_poly(angle, clockwise)
+        x.reflect_poly(45)
+        x.translate_poly(xMove, yMove)
         if x.scale_poly(scale):
             delete = True
         x.set_state(state)
@@ -99,6 +103,17 @@ def create_fractal(shape, angle, clockwise, depth, scale, colour, state, change)
         scale *= scl
         clr = update_colour(clr, change, state)
         clk = not(clk)
+        # if i < depth/4:
+        #     xMove = (xMove + 0.01) % 1
+        #     yMove = (yMove + 0.01) % 1
+        # elif i < depth*3/4:
+        #     xMove = (xMove - 0.01) 
+        #     yMove = (yMove - 0.01)
+        # else:
+        #     xMove = (xMove + 0.01) 
+        #     yMove = (yMove + 0.01) 
+
+
     return fractal
 
 
@@ -130,7 +145,7 @@ def main(regular, sides, angle, clockwise, depth, scale, clr, state, change):
     # shape = pos_shapes[shape % len(pos_shapes)]
     regular_shape = Polygon
     if regular:
-        shape = (True, Polygon, 3+sides%13)
+        shape = (True, regular_shape, 3+sides%13)
     else:
         shape = (False, irregular_shapes[sides%len(irregular_shapes)])
 
@@ -179,3 +194,4 @@ def main(regular, sides, angle, clockwise, depth, scale, clr, state, change):
         # polys = check_polys(polys, star(1))
         # redraw the window
         redrawGameWindow(polys, segments, shapes)
+# main(False, 5, 20, False, 14, 1.3, BLUE, 'udu', 15)

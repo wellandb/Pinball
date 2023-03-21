@@ -1,6 +1,10 @@
 # Start the game have options for pinball, pinball with set start and then a fractal explorer
 import pygame, sys
 import Pinball, map_menu, fractal_interaction
+import fractals
+import shape
+import time
+
 pygame.init()
 
 from settings import *
@@ -45,13 +49,19 @@ def fractal_inter():
 
 
 def main():
+    # background
+    # bkg = pygame.image.load("img/neon_L.jpg")
+    # bkg_fit = pygame.transform.scale(bkg, (screenWidth,screenHeight))
+    shapes = fractals.create_fractal((False, shape.Star), 20, True, 19, 1.5, (255, 255, 255), 'uuu', 20)
 
     buttons = []
-    buttons.append(Button(screenWidth* 1/4, 250, 100, 50, pinball))
-    buttons.append(Button(screenWidth* 2/4, 250, 100, 50, map_Menu))
-    buttons.append(Button(screenWidth* 3/4, 250, 100, 50, fractal_inter))
+    buttons.append(Button(screenWidth* 1/4 - 10, 225, 100, 50, pinball))
+    buttons.append(Button(screenWidth* 2/4 - 10, 225, 100, 50, map_Menu))
+    buttons.append(Button(screenWidth* 3/4 - 10, 225, 100, 50, fractal_inter))
     buttons[0].is_selected()
     selection = 0
+    key_sleep = False
+    count = 0
     menu = True
     while menu:
         # set clock
@@ -68,14 +78,24 @@ def main():
         #         b.check_click(pygame.mouse.get_pos())
             
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT]:
-            selection = (selection - 1) % len(buttons)
-        if keys[pygame.K_RIGHT]:
-            selection = (selection + 1) % len(buttons)
-        if keys[pygame.K_SPACE]:
-            choice = buttons[selection].select()
-            menu = False
-            
+        if not key_sleep:
+            if keys[pygame.K_LEFT]:
+                selection = (selection - 1) % len(buttons)
+                key_sleep = True
+            if keys[pygame.K_RIGHT]:
+                selection = (selection + 1) % len(buttons)
+                key_sleep = True
+            if keys[pygame.K_SPACE]:
+                choice = buttons[selection].select()
+                menu = False
+                key_sleep = True
+        else:
+            if count == 3:
+                count = 0
+                key_sleep = False
+            else:
+                count += 1
+                
 
         for i in buttons:
             if i == buttons[selection]:
@@ -84,10 +104,17 @@ def main():
                 i.not_selected()
 
         win.fill(BLACK)
+        # win.blit(bkg_fit,(0,0))
+        shapes.sort(reverse= True, key=lambda x: x.get_area())
+        for i in shapes:
+            i.draw(win)
+        for s in shapes:
+            s.rotate_poly(1, s.get_clockwise())
+            s.update_colour(3)
         for i in buttons:
             i.draw(win)
         # win.blit(pygame.image.load('bcg.img'), (screenWidth/2 - 225, 100))
-        win.blit(myfont.render('Choose option', True, WHITE), (screenWidth/2 - 220, 100))
+        win.blit(myfont.render('FracBall', True, WHITE), (screenWidth/2 - 50, 100))
         win.blit(smallfont.render('Pinball', True, WHITE), (screenWidth* 1/4, 250))
         win.blit(smallfont.render('Map', True, WHITE), (screenWidth* 2/4, 250))
         win.blit(smallfont.render('fractal', True, WHITE), (screenWidth* 3/4, 250))

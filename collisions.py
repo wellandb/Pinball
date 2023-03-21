@@ -28,9 +28,21 @@ def ballPegCollision(ball, pegs):
     # GET RELATIVE POSITION OF BALL
     # Treat peg like hex or octogon so that you can have multiple different trajectories off the pin but still keep it predictable and replicable
     for i in pegs:
-        if pygame.sprite.collide_circle(ball, i):
+        if ball.rect.colliderect(i):
             # Work out angle of incident and deflection using lines through the circles
             angle = calculate_bearing(ball.rect.x, ball.rect.y, i.rect.x, i.rect.y)
+            print(angle)
+            if ball.xVel > 0:
+                if ball.yVel > 0:
+                    print("approx top right")
+                else:
+                    print("approx bottom right")
+            else:
+                if ball.yVel > 0:
+                    print("approx top left")
+                else:
+                    print("approx bottom left")
+                
             if angle <= 30 or angle >= 330:
                 print("left")
                 pass # Ball from on top

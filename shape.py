@@ -81,6 +81,14 @@ class Shape(pygame.sprite.Sprite):
             y = i[1] + yMove
             points.append((x,y))
         self.points = points
+    
+    def reflect_poly(self, angle):
+        points = []
+        for i in self.points:
+            x = math.cos(math.radians(2*angle))*i[0] + math.sin(math.radians(2*angle)) * i[1]
+            y = math.sin(math.radians(2*angle))*i[0] - math.cos(math.radians(2*angle)) * i[1]
+            points.append((x,y))
+        self.points = points
 
 
     def random_colour(self):

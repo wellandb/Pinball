@@ -1,5 +1,7 @@
 import openai
-openai.api_key = "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"
+import chat_api
+
+openai.api_key = chat_api.API
 
 
 models = openai.Model.list()

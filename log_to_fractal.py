@@ -2,25 +2,35 @@ from settings import *
 import fractals
 import chatgpt_query
 
+# Works out the mean angle out of a list of angles
 def mean_angle(angles):
     return math.degrees(cmath.phase(sum(cmath.rect(1, math.radians(a)) for a in angles)/len(angles)))
 
 def main(line = -1):
+    # Route tracker is a text file that stores all the peg locations and ball velocity of every ball and peg collision
     file = open("route_tracker.txt", "r")
+    # split into all the different routes
     lines = file.read().splitlines()
+    # choose the line to create the fractal with, set as the last line
     fractal_line = lines[line].split()
     file.close()
 
+    # stores the positions of all the collided pegs
     pegs = []
-
+    # stores the velocity of the ball
     vels = []
 
+    # split the stored values into pegs and velocity
     for i in range(len(fractal_line)):
         if i%4 == 0:
             pegs.append([float(fractal_line[i]),float(fractal_line[i+1])])
         if i%4 == 2:
             vels.append([float(fractal_line[i]),float(fractal_line[i+1])])
 
+    # if no collisions made
+    if len(pegs) == 0 or len(vels) == 0:
+        fractals.main(False, 1, 25, True, 19, 1.2, RED, 'uuu', 10)
+        return
     # Fractal inputs
 
     # could make multiple shapes
@@ -28,13 +38,18 @@ def main(line = -1):
 
     # SHAPE
     # needs number of shapes, then
+
     #for i in range(len(shapes)):
     #    if pegs % len(shapes) == i:
     #        shape = i
+
+    # regular = True, means that the shape created will be a equillateral polygon
+    # regular = False, means that the shape will be chosen from the irregular shapes list
     if len(pegs) < 3:
         regular = False
     else:
         regular = True
+    # either the sides of the polygon or the number modulo length of list for irregular shapes
     shape = 3 + len(pegs) % 10
     
 
@@ -72,12 +87,12 @@ def main(line = -1):
     # depth
     # need number from 5 to 20
     
-    depth = 5 + len(pegs)
+    depth = 5 + len(pegs) % 15
 
     # scale
     # need numnber from 1.05 to 2
     # also needs to be related to depth so large depth has small scale and vice versa
-    scale = 1 + len(pegs)/len(vels)
+    scale = 1 + 1/depth
 
     # random colour: true/false
 
@@ -89,6 +104,7 @@ def main(line = -1):
     
     fractals.main(regular, shape, angle, clockwise, depth, scale, colour, state, change)
 
+    # Create the call to chat gpt to create a fractal
     chatgpt = open("to_chat.txt", 'a')
 
     if regular:
@@ -100,13 +116,14 @@ def main(line = -1):
     else:
         clk = "rotating " + str(angle) + " anticlockwise "
     
-    d = "with depth " + str(depth)
-    s = "with scale " + str(scale)
+    d = " with depth " + str(depth)
+    s = " with scale " + str(scale)
     cl = "using the colour " + str(colour) + " and changing the colour values by " + str(change)
-    question = "Create a fractal in pygame " + reg + clk + d + s + cl
+    question = "Create a fractal in pygame " + reg + clk + d + s + cl + '\n'
     chatgpt.write(question)
     chatgpt.close()
-
-    chatgpt_query.main(question)
+    chat = False
+    if chat:
+        chatgpt_query.main(question)
 
 

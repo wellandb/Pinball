@@ -6,9 +6,11 @@ from collisions import *
 import math
 from boardGeneration import *
 import log_to_fractal
+import time
 
-def redrawGameWindow(balls):
+def redrawGameWindow(bkg,balls):
     win.fill(BLACK)
+    win.blit(bkg, (0,0))
     for i in pegs:
        i.draw()
     for i in balls:
@@ -32,25 +34,31 @@ def main():
 
     # Initialization
     win.fill(BLACK)
+
+    bkg = pygame.image.load("img/neon_L.jpg")
+    bkg_fit = pygame.transform.scale(bkg, (screenWidth,screenHeight))
+    win.blit(bkg_fit, (0,0))
     for i in pegs:
         i.draw()
         pygame.display.update()
 
+    balls = pygame.sprite.Group()
     # save parameters to file
     f = open("parameter_log.txt", "a")
 
     # First loop to get starting parameters
     run = True
+    time.sleep(0.2)
     while run:
 
         clock.tick(30)
 
         mouse = pygame.mouse.get_pos()
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_SPACE]:
-            ballX, ballY = mouseClick()
-            f.write(str(ballX) +  " "  + str(ballY))
-            run = False
+        # if keys[pygame.K_SPACE]:
+        #     ballX, ballY = mouseClick()
+        #     f.write(str(ballX) +  " "  + str(ballY))
+        #     run = False
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -61,6 +69,7 @@ def main():
                 f.write(str(ballX) +  " "  + str(ballY))
                 run = False
         
+        redrawGameWindow(bkg_fit, balls)
         pygame.display.update()
 
         
@@ -84,6 +93,8 @@ def main():
                 run = True
 
         win.fill(BLACK)
+
+        redrawGameWindow(bkg_fit, balls)
         for i in pegs:
             i.draw()
         pygame.draw.circle(win, WHITE, [ballX, ballY], 5)
@@ -95,7 +106,6 @@ def main():
     f.close()
 
     # create ball
-    balls = pygame.sprite.Group()
     balls.add(ball(ballX, ballY, ballXVel, ballYVel)) # x, y, xVel, yVel: ALL NEED TO BE CHOSEN EACH RUN AT START
 
     log = open("route_tracker.txt", "a")
@@ -124,7 +134,7 @@ def main():
         if ballWallCollision(balls):
             run = False
 
-        redrawGameWindow(balls)
+        redrawGameWindow(bkg_fit, balls)
 
 
     log.write("\n")

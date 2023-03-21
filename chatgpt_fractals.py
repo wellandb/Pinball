@@ -1,37 +1,6 @@
 # THIS IS A SERIES OF FRACTALS CREATED BY CHAT-GPT
 
-# Q: can you create a fractal image?
-# import math
-# for i in range(-10, 10, 1):
-#     for j in range(-10,10,1,):
-#         if j == 0 :
-#             continue
-#         angle = math.degrees(math.atan(float(i)/float(j)))
 
-#         print(i,j,angle)
-
-# --------------
-
-# Q: can you create a fractal image?
-# import turtle
-
-# def draw_fractal(length, depth):
-#     if depth == 0:
-#         turtle.forward(length)
-#     else:
-#         draw_fractal(length/3, depth-1)
-#         turtle.left(60)
-#         draw_fractal(length/3, depth-1)
-#         turtle.right(120)
-#         draw_fractal(length/3, depth-1)
-#         turtle.left(60)
-#         draw_fractal(length/3, depth-1)
-
-# turtle.speed(0)
-# draw_fractal(200, 4)
-# turtle.done()
-
-# --------------
 
 # Q:don't use turtle (turtle wasn't working on my computer)
 # import numpy as np
@@ -53,39 +22,6 @@
 # --------------
 
 # Q: create a fractal made out of star shapes
-
-# import turtle
-
-# def draw_star(size):
-#     for i in range(5):
-#         turtle.forward(size)
-#         turtle.right(144)
-#         turtle.forward(size)
-#         turtle.left(72)
-
-# def fractal_star(size, levels):
-#     if levels == 0:
-#         return
-#     draw_star(size)
-#     turtle.right(72)
-#     fractal_star(size/2, levels-1)
-#     turtle.left(144)
-#     fractal_star(size/2, levels-1)
-#     turtle.right(72)
-#     turtle.forward(size)
-#     turtle.right(144)
-#     turtle.forward(size)
-#     turtle.left(72)
-#     fractal_star(size/2, levels-1)
-#     turtle.left(144)
-#     fractal_star(size/2, levels-1)
-#     turtle.right(72)
-#     turtle.forward(size)
-#     turtle.right(144)
-#     turtle.forward(size)
-# fractal_star(10, 5)
-
-# --------------
 
 # Q:don't use turtle (turtle wasn't working on my computer)
 
@@ -119,7 +55,7 @@
 
 # # Main game loop
 # running = True
-# level = 0
+# level = 5
 # while running:
 #     for event in pygame.event.get():
 #         if event.type == pygame.QUIT:
@@ -184,91 +120,173 @@
 # -----
 
 #As an AI language model, I cannot create visual content. However, I can provide you with the code to create a fractal in Pygame using equilateral polygons with sides greater than 2 rotating 2.7315064928574366 clockwise with depth 19 with scale 1.2 using the colour (6, 141, 75) and changing the colour values by 56. Here's the code:
-import pygame
-import math
+# import pygame
+# import math
 
-# Initialize Pygame
-pygame.init()
+# # Initialize Pygame
+# pygame.init()
 
-# Set the window size
-WINDOW_SIZE = (800, 800)
+# # Set the window size
+# WINDOW_SIZE = (800, 800)
 
-# Set the background color
-BACKGROUND_COLOR = (255, 255, 255)
+# # Set the background color
+# BACKGROUND_COLOR = (255, 255, 255)
 
-# Set the polygon color
-POLYGON_COLOR = (6, 141, 75)
+# # Set the polygon color
+# POLYGON_COLOR = (6, 141, 75)
 
-# Set the color change value
-COLOR_CHANGE = 56
+# # Set the color change value
+# COLOR_CHANGE = 56
 
-# Set the polygon sides
-SIDES = 3
+# # Set the polygon sides
+# SIDES = 3
 
-# Set the polygon rotation
-ROTATION = 2.7315064928574366
+# # Set the polygon rotation
+# ROTATION = 2.7315064928574366
 
-# Set the polygon depth
-DEPTH = 19
+# # Set the polygon depth
+# DEPTH = 19
 
-# Set the polygon scale
-SCALE = 1.2
+# # Set the polygon scale
+# SCALE = 1.2
 
-# Create the window
-screen = pygame.display.set_mode(WINDOW_SIZE)
+# # Create the window
+# screen = pygame.display.set_mode(WINDOW_SIZE)
 
-# Set the window title
-pygame.display.set_caption("Fractal")
+# # Set the window title
+# pygame.display.set_caption("Fractal")
 
-# Define the function to draw the fractal
-def draw_fractal(x, y, size, rotation, depth):
-    # Draw the polygon
-    polygon_points = []
-    for i in range(SIDES):
-        angle = math.radians(360 / SIDES * i + rotation)
-        x_pos = x + size * math.cos(angle)
-        y_pos = y + size * math.sin(angle)
-        polygon_points.append((x_pos, y_pos))
-    pygame.draw.polygon(screen, POLYGON_COLOR, polygon_points)
+# # Define the function to draw the fractal
+# def draw_fractal(x, y, size, rotation, depth):
+#     # Draw the polygon
+#     polygon_points = []
+#     for i in range(SIDES):
+#         angle = math.radians(360 / SIDES * i + rotation)
+#         x_pos = x + size * math.cos(angle)
+#         y_pos = y + size * math.sin(angle)
+#         polygon_points.append((x_pos, y_pos))
+#     pygame.draw.polygon(screen, POLYGON_COLOR, polygon_points)
 
-    # Recursively draw the fractal
-    if depth > 0:
-        new_size = size * SCALE
-        new_depth = depth - 1
-        draw_fractal(x, y, new_size, rotation + ROTATION, new_depth)
-        draw_fractal(x + size * math.cos(math.radians(ROTATION)), y + size * math.sin(math.radians(ROTATION)), new_size, rotation - ROTATION, new_depth)
+#     # Recursively draw the fractal
+#     if depth > 0:
+#         new_size = size * SCALE
+#         new_depth = depth - 1
+#         draw_fractal(x, y, new_size, rotation + ROTATION, new_depth)
+#         draw_fractal(x + size * math.cos(math.radians(ROTATION)), y + size * math.sin(math.radians(ROTATION)), new_size, rotation - ROTATION, new_depth)
 
-# Define the function to change the polygon color
-def change_color(color):
-    new_color = []
-    for value in color:
-        new_value = value + COLOR_CHANGE
-        if new_value > 255:
-            new_value = 255
-        new_color.append(new_value)
-    return tuple(new_color)
+# # Define the function to change the polygon color
+# def change_color(color):
+#     new_color = []
+#     for value in color:
+#         new_value = value + COLOR_CHANGE
+#         if new_value > 255:
+#             new_value = 255
+#         new_color.append(new_value)
+#     return tuple(new_color)
 
-# Draw the fractal
-draw_fractal(WINDOW_SIZE[0] / 2, WINDOW_SIZE[1] / 2, 200, 0, DEPTH)
+# # Draw the fractal
+# draw_fractal(WINDOW_SIZE[0] / 2, WINDOW_SIZE[1] / 2, 200, 0, DEPTH)
 
-# Update the display
-pygame.display.flip()
+# # Update the display
+# pygame.display.flip()
 
-# Run the game loop
-running = True
-while running:
-    # Handle events
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+# # Run the game loop
+# running = True
+# while running:
+#     # Handle events
+#     for event in pygame.event.get():
+#         if event.type == pygame.QUIT:
+#             running = False
 
-    # Change the polygon color
-    POLYGON_COLOR = change_color(POLYGON_COLOR)
+#     # Change the polygon color
+#     POLYGON_COLOR = change_color(POLYGON_COLOR)
 
-    # Redraw the fractal
-    screen.fill(BACKGROUND_COLOR)
-    draw_fractal(WINDOW_SIZE[0] / 2, WINDOW_SIZE[1] / 2, 200, 0, DEPTH)
-    pygame.display.flip()
+#     # Redraw the fractal
+#     screen.fill(BACKGROUND_COLOR)
+#     draw_fractal(WINDOW_SIZE[0] / 2, WINDOW_SIZE[1] / 2, 200, 0, DEPTH)
+#     pygame.display.flip()
 
-# Quit Pygame
-pygame.quit()
+# # Quit Pygame
+# pygame.quit()
+
+
+# -----
+
+# import pygame
+# import math
+
+# # Initialize pygame
+# pygame.init()
+
+# # Set the screen size
+# screen_size = (800, 800)
+# screen = pygame.display.set_mode(screen_size)
+
+# # Set the background color
+# background_color = (255, 255, 255)
+
+# # Set the polygon color
+# polygon_color = (40, 127, 209)
+
+# # Set the color change value
+# color_change = 10
+
+# # Set the polygon sides and rotation angle
+# sides = 3
+# angle = -27.154603294513702
+
+# # Set the fractal depth and scale
+# depth = 2
+# scale = 1.2
+
+# # Define the function to draw the fractal
+# def draw_fractal(x, y, size, depth):
+#     # Draw the polygon
+#     polygon_points = []
+#     for i in range(sides):
+#         angle_rad = math.radians(angle + i * 360 / sides)
+#         x_i = x + size * math.cos(angle_rad)
+#         y_i = y + size * math.sin(angle_rad)
+#         polygon_points.append((x_i, y_i))
+#     pygame.draw.polygon(screen, polygon_color, polygon_points)
+
+#     # Recursively draw the fractal
+#     if depth > 0:
+#         for i in range(sides):
+#             angle_rad = math.radians(angle + i * 360 / sides)
+#             x_i = x + size * math.cos(angle_rad)
+#             y_i = y + size * math.sin(angle_rad)
+#             draw_fractal(x_i, y_i, size * scale, depth - 1)
+
+# # Set the initial size and position of the fractal
+# size = 300
+# x = screen_size[0] / 2
+# y = screen_size[1] / 2
+
+# # Draw the fractal
+# draw_fractal(x, y, size, depth)
+
+# # Update the screen
+# pygame.display.flip()
+
+# # Run the game loop
+# running = True
+# while running:
+#     for event in pygame.event.get():
+#         if event.type == pygame.QUIT:
+#             running = False
+
+#     # Change the polygon color
+#     polygon_color = tuple((c + color_change) % 256 for c in polygon_color)
+
+#     # Clear the screen
+#     screen.fill(background_color)
+
+#     # Draw the fractal
+#     draw_fractal(x, y, size, depth)
+
+#     # Update the screen
+#     pygame.display.flip()
+
+# # Quit pygame
+# pygame.quit()

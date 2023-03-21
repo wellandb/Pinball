@@ -7,7 +7,7 @@ class ball(pygame.sprite.Sprite):
     
     def __init__(self, x, y, xVel, yVel):
         super().__init__()
-        self.rect = pygame.Rect(x, y, 5, 5)
+        self.rect = pygame.Rect(x, y, 10, 10)
         self.xVel = xVel
         self.yVel = yVel
         self.colour = WHITE
@@ -16,7 +16,8 @@ class ball(pygame.sprite.Sprite):
         self.trails = []
 
     def draw(self):
-        pygame.draw.circle(win, self.colour ,[self.rect.x, self.rect.y], self.radius)
+        pygame.draw.circle(win, self.colour ,[self.rect.x + self.rect.width/2, self.rect.y+ self.rect.height/2], self.radius)
+        # pygame.draw.rect(win, BLUE, self.rect)
         self.tick += 1
         if self.tick == 3:
             self.trail()
@@ -39,4 +40,4 @@ class ball(pygame.sprite.Sprite):
         return math.tan(self.rect.y/self.rect.x) # Doesn't return Angle
 
     def trail(self):
-        self.trails.append(trail(BLUE, [self.rect.x-(self.xVel*2), self.rect.y-(self.yVel*2)], [self.rect.x, self.rect.y]))
+        self.trails.append(trail(self.colour, [self.rect.x-(self.xVel*2), self.rect.y-(self.yVel*2)], [self.rect.x, self.rect.y]))

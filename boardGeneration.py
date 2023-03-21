@@ -8,7 +8,7 @@ def drawLine(pegs, number, start, end):
     changeX = int((end[0]-start[0]))/number
     changeY = int((end[1]-start[1]))/number
     for i in range(number):
-        pegs.add(peg((start[0])+(i*(changeX)), (start[1])+(i*(changeY)), 7, RED))
+        pegs.add(peg((start[0])+(i*(changeX)), (start[1])+(i*(changeY)), 7, WHITE))
 
 def drawShape(pegs, number, start, shape):
     pass
