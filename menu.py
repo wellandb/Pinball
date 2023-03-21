@@ -121,7 +121,7 @@ def main():
         pygame.display.update()
 
     if choice == "pinball":
-        Pinball.main(boardGeneration.board2())
+        Pinball.main(boardGeneration.board1())
     elif choice == "map_menu":
         board = map_menu.main()
         Pinball.main(board)

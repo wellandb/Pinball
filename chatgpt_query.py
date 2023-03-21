@@ -16,6 +16,26 @@ def main(question):
 
     message = completion.choices[0].message.content
     print(message)
+    lines = message.splitlines()
+    record = False
+    output = []
+    for i in lines:
+        if i.startswith("import"):
+            record = True
+        if record:
+            output.append(i)
+        if i=="```":
+            if record:
+                output.pop(-1)
+            record = not(record)
+        
+    print(lines)
     file = open("chat_fractal.py", "w")
-    file.write(message)
     file.close()
+    file = open("chat_fractal.py", "a")
+    for o in output:
+        file.write(o)
+        file.write('\n')
+    file.close()
+    import chat_fractal
+    chat_fractal

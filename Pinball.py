@@ -16,7 +16,6 @@ def redrawGameWindow(bkg,balls,pegs):
     for i in balls:
         i.draw()
         i.move()
-    pygame.display.update()
 
 
 def main(board):
@@ -43,8 +42,6 @@ def main(board):
         i.draw()
 
     balls = pygame.sprite.Group()
-    # save parameters to file
-    f = open("parameter_log.txt", "a")
 
     # First loop to get starting parameters
     run = True
@@ -55,6 +52,10 @@ def main(board):
 
         mouse = pygame.mouse.get_pos()
         keys = pygame.key.get_pressed()
+        if keys[pygame.K_k]:
+            ballX = float(input("type ball x value from 0 to " + str(screenWidth)+": "))
+            ballY = float(input("type ball y value from 0 to " + str(screenHeight)+": "))
+            run = False
         # if keys[pygame.K_SPACE]:
         #     ballX, ballY = mouseClick()
         #     f.write(str(ballX) +  " "  + str(ballY))
@@ -66,10 +67,10 @@ def main(board):
             # if mous click then set ball start position
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 ballX, ballY = mouseClick()
-                f.write(str(ballX) +  " "  + str(ballY))
                 run = False
         
         redrawGameWindow(bkg_fit, balls, pegs)
+        win.blit(smallfont.render('To type parameters press k', True, WHITE), (screenWidth - 300, screenHeight-50))
         pygame.display.update()
 
         
@@ -81,7 +82,16 @@ def main(board):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE]:
             ballXVel, ballYVel = mouseClick2()
-            f.write(" " + str(ballXVel) + " " + str(ballYVel) + "\n")
+            run = True
+
+        if keys[pygame.K_k]:
+            ballXVel = float(input("type ball x velocity value from -10 to 10: "))
+            print(" The velocity is weighted so the y Velocity is more to choose direction.")
+            ballYVel = float(input("type ball y velocity value from -10 to 10: "))
+            if ballYVel < 0:
+                ballYVel= -math.sqrt(100-ballXVel**2)
+            else:
+                ballYVel = math.sqrt(100-ballXVel**2)
             run = True
 
         for event in pygame.event.get():
@@ -89,7 +99,6 @@ def main(board):
                 run = True
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 ballXVel, ballYVel = mouseClick2()
-                f.write(" " + str(ballXVel) + " " + str(ballYVel) + "\n")
                 run = True
 
         win.fill(BLACK)
@@ -97,12 +106,18 @@ def main(board):
         redrawGameWindow(bkg_fit, balls, pegs)
         for i in pegs:
             i.draw()
+        if abs(mouse[0]) < screenWidth and abs(mouse[1]) <screenHeight:
+            pygame.draw.line(win, WHITE, [ballX, ballY], mouse)
         pygame.draw.circle(win, WHITE, [ballX, ballY], 5)
-        pygame.draw.line(win, WHITE, [ballX, ballY], mouse)
+        win.blit(smallfont.render('To type parameters press k', True, WHITE), (screenWidth - 300, screenHeight-50))
         
         pygame.display.update()
 
+    # save parameters to file
+    f = open("parameter_log.txt", "a")
     # close the file
+    f.write(str(ballX) +  " "  + str(ballY))
+    f.write(" " + str(ballXVel) + " " + str(ballYVel) + "\n")
     f.close()
 
     # create ball
@@ -135,6 +150,7 @@ def main(board):
             run = False
 
         redrawGameWindow(bkg_fit, balls,pegs)
+        pygame.display.update()
 
 
     log.write("\n")

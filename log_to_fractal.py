@@ -7,6 +7,8 @@ def mean_angle(angles):
     return math.degrees(cmath.phase(sum(cmath.rect(1, math.radians(a)) for a in angles)/len(angles)))
 
 def main(line = -1):
+    # Query chatgpt
+    chat = True
     # Route tracker is a text file that stores all the peg locations and ball velocity of every ball and peg collision
     file = open("route_tracker.txt", "r")
     # split into all the different routes
@@ -129,13 +131,15 @@ def main(line = -1):
     else:
         clk = "rotating " + str(angle) + " anticlockwise "
     
-    d = " with depth " + str(depth)
+    # I am going to decrease depth as it often causes it not to run as it takes too long
+    d = " with depth " + str(depth%8)
     s = " with scale " + str(scale)
-    cl = " using the colour " + str(colour) + " and changing the colour values by " + str(change)
-    question = "Create a fractal in pygame " + reg + clk + d + s + cl + '\n'
+    cl = " using the colour " + str(colour) 
+    ch = " and changing the colour values by " + str(change%10) + " while moduloing the values by 255 so that it is a valid colour" # this isn't added right now as chatgpt often forgets to mod by 255 causing it to not run
+    question = "Create a fractal in pygame " + reg + clk + d + s + cl +ch+ '\n'
     chatgpt.write(question)
     chatgpt.close()
-    chat = False
+    
     if chat:
         chatgpt_query.main(question)
 
