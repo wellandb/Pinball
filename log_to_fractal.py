@@ -92,15 +92,28 @@ def main(line = -1):
     # scale
     # need numnber from 1.05 to 2
     # also needs to be related to depth so large depth has small scale and vice versa
-    scale = 1 + 1/depth
+    scale = 1 + 1/(depth/4)
 
-    # random colour: true/false
+    state = int(math.sqrt(x_avg**2 + y_avg**2)) % 8
+    if state == 0:
+            state = "ddd"
+    elif state == 1:
+        state = "ddu"
+    elif state == 2:
+        state = "dud"
+    elif state == 3:
+        state = "duu"
+    elif state == 4:
+        state = "udd"
+    elif state == 5:
+        state = "udu"
+    elif state == 6:
+        state = "uud"
+    else:
+        state = "uuu"
 
-    state = "udu"
     # change needs to be from 4-60
     change = 10 + int(x_avg**2 * y_avg**2) % 50
-    depth = 19
-    scale = 1.2
     
     fractals.main(regular, shape, angle, clockwise, depth, scale, colour, state, change)
 
@@ -118,7 +131,7 @@ def main(line = -1):
     
     d = " with depth " + str(depth)
     s = " with scale " + str(scale)
-    cl = "using the colour " + str(colour) + " and changing the colour values by " + str(change)
+    cl = " using the colour " + str(colour) + " and changing the colour values by " + str(change)
     question = "Create a fractal in pygame " + reg + clk + d + s + cl + '\n'
     chatgpt.write(question)
     chatgpt.close()

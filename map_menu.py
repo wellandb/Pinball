@@ -4,17 +4,48 @@ import boardGeneration
 import fractals
 import shape
 
+class Button(pygame.sprite.Sprite):
+
+    def __init__(self, x, y, width, height, function):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.rect = pygame.Rect(x, y, width, height)
+        self.function = function
+        self.colour = BLUE
+        
+    def draw(self, window):
+        pygame.draw.rect(window, self.colour, self.rect)
+
+    def func(self):
+        self.function()
+        return self.function()
+    
+    def check_click(self, mouse):
+        if self.rect.collidepoint(mouse):
+            self.func()
+
+    def select(self):
+        return self.func()
+    
+    def is_selected(self):
+        self.colour = RED
+    
+    def not_selected(self):
+        self.colour = BLUE
+
 
 def main():
     boards = boardGeneration.get_boards()
-    shapes = fractals.create_fractal((False, shape.Star), 20, True, 19, 1.5, (255, 255, 255), 'uuu', 20)
+    shapes = fractals.create_fractal((False, shape.Star, 4), 20, True, 19, 1.5, (255, 255, 255), 'uuu', 20)
 
     buttons = []
-    for i in range(boardGeneration.get_boards()):
-        buttons.append(menu.Button(screenWidth* i/len(boardGeneration.get_boards()) - 10, 225, 100, 50, ))
+    for i in range(len(boards)):
+        buttons.append(Button(screenWidth* (i+1)/4 - 10, 225, 100, 50, boards[i]))
     buttons[0].is_selected()
     selection = 0
-    key_sleep = False
+    key_sleep = True
     count = 0
     menu = True
     while menu:
@@ -64,10 +95,10 @@ def main():
         for i in buttons:
             i.draw(win)
         # win.blit(pygame.image.load('bcg.img'), (screenWidth/2 - 225, 100))
-        win.blit(myfont.render('FracBall', True, WHITE), (screenWidth/2 - 50, 100))
-        win.blit(smallfont.render('Pinball', True, WHITE), (screenWidth* 1/4, 250))
-        win.blit(smallfont.render('Map', True, WHITE), (screenWidth* 2/4, 250))
-        win.blit(smallfont.render('fractal', True, WHITE), (screenWidth* 3/4, 250))
+        win.blit(myfont.render('Map Choice', True, WHITE), (screenWidth/2 - 50, 100))
+        win.blit(smallfont.render('Board 1', True, WHITE), (screenWidth* 1/4, 250))
+        win.blit(smallfont.render('Board 2', True, WHITE), (screenWidth* 2/4, 250))
+        win.blit(smallfont.render('Board 3', True, WHITE), (screenWidth* 3/4, 250))
 
         pygame.display.update()
     return choice

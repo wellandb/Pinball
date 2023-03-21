@@ -111,6 +111,7 @@ def main():
             s.update_colour(3)
         for i in buttons:
             i.draw(win)
+
         # win.blit(pygame.image.load('bcg.img'), (screenWidth/2 - 225, 100))
         win.blit(myfont.render('FracBall', True, WHITE), (screenWidth/2 - 50, 100))
         win.blit(smallfont.render('Pinball', True, WHITE), (screenWidth* 1/4, 250))
@@ -120,9 +121,9 @@ def main():
         pygame.display.update()
 
     if choice == "pinball":
-        Pinball.main(boardGeneration.board3())
+        Pinball.main(boardGeneration.board2())
     elif choice == "map_menu":
-        board = boardGeneration.board1()
+        board = map_menu.main()
         Pinball.main(board)
     elif choice == "fractal interaction":
         fractal_interaction.main(False, 1, 20, True, 19, 1.5, (255, 255, 255), 'uuu', 20)

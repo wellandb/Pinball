@@ -44,6 +44,5 @@ def board3():
     return pegs
 
 def get_boards():
-    boards = []
-    boards.append(board1())
+    boards = [board1, board2, board3]
     return boards

@@ -1,5 +1,8 @@
 from settings import *
 from shape import *
+import pygame_widgets
+from pygame_widgets.slider import Slider
+from pygame_widgets.textbox import TextBox
 
 def to_pixels(x,y):
     return(screenWidth/2 + screenWidth * x/20, screenHeight/2 - screenHeight * y/20)
@@ -103,7 +106,7 @@ def create_fractal(shape, angle, clockwise, depth, scale, colour, state, change)
     return fractal
 
 
-def redrawGameWindow(polys, segments, shapes):
+def redrawGameWindow(polys, segments, shapes, sliders, outputs, labels):
     win.fill(WHITE)
     draw_grid(win)
     for segment in segments:
@@ -116,17 +119,85 @@ def redrawGameWindow(polys, segments, shapes):
     shapes.sort(reverse= True, key=lambda x: x.get_area())
     for shape in shapes:
         shape.draw(win)
+    for s in sliders:
+        s.draw()
+    for o in outputs:
+        o.draw()
+    for l in labels:
+        l.draw()
+    pygame_widgets.update(pygame.event.get())
     pygame.display.update()
+
 
 def main(regular, sides, angle, clockwise, depth, scale, clr, state, change):
     segments = []
     polys = []
     shapes = []
+    reg_slider = Slider(win, screenWidth-100, 0, 100, 40, min=0, max=1, step=1)
+    reg_output = TextBox(win, screenWidth-150, 0, 50, 40, fontSize=30, textColour=BLACK)
+    reg_label = TextBox(win, screenWidth-300, 0, 150, 40, fontSize=30, textColour=BLACK)
+    reg_label.disable()
+    reg_label.setText("Equillateral:")
 
+    sides_slider = Slider(win, screenWidth-100, 50, 100, 40, min=0, max=20, step=1)
+    sides_output = TextBox(win, screenWidth-150, 50, 50, 40, fontSize=30, textColour=BLACK)
+    sides_label = TextBox(win, screenWidth-300, 50, 150, 40, fontSize=30, textColour=BLACK)
+    sides_label.disable()
+    sides_label.setText("Sides:")
+
+    angle_slider = Slider(win, screenWidth-100, 100, 100, 40, min=0, max=360, step=1)
+    angle_output = TextBox(win, screenWidth-150, 100, 50, 40, fontSize=30, textColour=BLACK)
+    angle_label = TextBox(win, screenWidth-300, 100, 150, 40, fontSize=30, textColour=BLACK)
+    angle_label.disable()
+    angle_label.setText("Angle:")
+
+    clockwise_slider = Slider(win, screenWidth-100,150, 100, 40, min=0, max=1, step=1)
+    clockwise_output = TextBox(win, screenWidth-150, 150, 50, 40, fontSize=30, textColour=BLACK)
+    clockwise_label = TextBox(win, screenWidth-300, 150, 150, 40, fontSize=30, textColour=BLACK)
+    clockwise_label.disable()
+    clockwise_label.setText("Clockwise:")
+
+    depth_slider = Slider(win, screenWidth-100, 200, 100, 40, min=1, max=30, step=1)
+    depth_output = TextBox(win, screenWidth-150, 200, 50, 40, fontSize=30, textColour=BLACK)
+    depth_label = TextBox(win, screenWidth-300, 200, 150, 40, fontSize=30, textColour=BLACK)
+    depth_label.disable()
+    depth_label.setText("Depth:")
+
+    scale_slider = Slider(win, screenWidth-100, 250, 100, 40, min=1, max=2, step=0.1)
+    scale_output = TextBox(win, screenWidth-150, 250, 50, 40, fontSize=30, textColour=BLACK)
+    scale_label = TextBox(win, screenWidth-300, 250, 150, 40, fontSize=30, textColour=BLACK)
+    scale_label.disable()
+    scale_label.setText("Scale:")
+
+    clr_slider = Slider(win, screenWidth-100, 300, 100, 40, min=0, max=255, step=1)
+    clr_output = TextBox(win, screenWidth-150, 300, 50, 40, fontSize=10, textColour=BLACK)
+    clr_label = TextBox(win, screenWidth-300, 300, 150, 40, fontSize=30, textColour=BLACK)
+    clr_label.disable()
+    clr_label.setText("Colour:")
+
+    state_slider = Slider(win, screenWidth-100, 350, 100, 40, min=0, max=7, step=1)
+    state_output = TextBox(win, screenWidth-150, 350, 50, 40, fontSize=30, textColour=BLACK)
+    state_label = TextBox(win, screenWidth-300, 350, 150, 40, fontSize=30, textColour=BLACK)
+    state_label.disable()
+    state_label.setText("RGB Change:")
+
+    change_slider = Slider(win, screenWidth-100, 400, 100, 40, min=1, max=99, step=1)
+    change_output = TextBox(win, screenWidth-150, 400, 50, 40, fontSize=30, textColour=BLACK)
+    change_label = TextBox(win, screenWidth-300, 400, 150, 40, fontSize=30, textColour=BLACK)
+    change_label.disable()
+    change_label.setText("Gradient:")
+
+    sliders = [reg_slider, sides_slider, angle_slider, clockwise_slider, depth_slider, scale_slider, clr_slider, state_slider, change_slider]
+    outputs = [reg_output, sides_output, angle_output, clockwise_output, depth_output, scale_output, clr_output, state_output, change_output]
+    for i in range(len(outputs)):
+        outputs[i].disable()
+        outputs[i].setText(sliders[i].getValue())
+        
+    labels = [reg_label, sides_label, angle_label, clockwise_label, depth_label, scale_label, clr_label, state_label, change_label]
     irregular_shapes = [Star, Irregular]
     regular_shape = Polygon
     if regular:
-        shape = (True, regular_shape, 3+sides%6)
+        shape = (True, regular_shape, 3+sides%12)
     else:
         shape = (False, irregular_shapes[sides%len(irregular_shapes)], sides)
 
@@ -137,8 +208,6 @@ def main(regular, sides, angle, clockwise, depth, scale, clr, state, change):
     shapes = create_fractal(shape, angle, clockwise, depth, scale, clr, state, change)
     # shapes = create_fractal(star, 20, True, 10, 1.2, (146, 231, 56), 'udu', 3)
 
-    key_space = False
-    count = 0
     done = False
     while not done:
         clock.tick(30)
@@ -151,46 +220,71 @@ def main(regular, sides, angle, clockwise, depth, scale, clr, state, change):
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_UP]:
-            scale = 0.95
+            scale_frac = 0.95
         elif keys[pygame.K_DOWN]:
-            scale = 1.05
+            scale_frac = 1.05
         else:
-            scale = 1
-        if key_space:
-            if keys[pygame.K_SPACE]:
-                regular = bool(input("enter whether it is a regular shape or not(True or False): "))
-                sides = int(input("enter a number for shape: "))
-                angle = int(input("enter the angle of rotation: "))
-                clockwise = bool("Enter True or False for clockwise rotation or not: ")
-                depth = int(input("enter a new depth: "))
-                scale = float(input("enter a number from 1-2 for scale: "))
-                red = int(input("enter a colour in r,g,b form (0-255,0-255,0-255) starting with red: "))
-                green = int(input("now green: "))
-                blue = int(input("now for blue: "))
-                clr = (red,green,blue)
-                state = input("enter a state in the form uuu or ddd or udu: ")
-                change = int(input("enter a number for change of colour: "))
-                if regular:
-                    shape = (True, regular_shape, 3+sides%6)
-                else:
-                    shape = (False, irregular_shapes[sides%len(irregular_shapes)], sides)
+            scale_frac = 1
 
-                angle = 20
-                clockwise = True
-                rotation = 1
+        regular = reg_slider.getValue()
+        reg_output.setText(regular)
 
-                shapes = create_fractal(shape, angle, clockwise, depth, scale, clr, state, change)
-                key_space = False
+        sides = sides_slider.getValue()
+        sides_output.setText(sides)
+
+        angle = angle_slider.getValue()
+        angle_output.setText(angle)
+
+        clockwise = clockwise_slider.getValue()
+        clockwise_output.setText(clockwise)
+
+        depth = depth_slider.getValue()
+        depth_output.setText(depth)
+
+        scale = scale_slider.getValue()
+        scale_output.setText(scale)
+
+        clr = (clr_slider.getValue(),clr_slider.getValue(),clr_slider.getValue())
+        clr_output.setText(clr)
+
+        state = state_slider.getValue()
+        if state == 0:
+            state = "ddd"
+        elif state == 1:
+            state = "ddu"
+        elif state == 2:
+            state = "dud"
+        elif state == 3:
+            state = "duu"
+        elif state == 4:
+            state = "udd"
+        elif state == 5:
+            state = "udu"
+        elif state == 6:
+            state = "uud"
         else:
-            if count == 10:
-                key_space = True
-                count = 0
-            else:
-                count += 1
+            state = "uuu"
+        state_output.setText(state)
+
+        change = change_slider.getValue()
+        change_output.setText(change)
+
+        if regular == 1:
+            shape = (True, regular_shape, 3+sides%12)
+        else:
+            shape = (False, irregular_shapes[sides%len(irregular_shapes)], sides)
+
+        rotation = 1
+        for s in sliders:
+            s.listen(pygame.event.get())
+        
+
+        if keys[pygame.K_SPACE]:
+            shapes = create_fractal(shape, angle, clockwise, depth, scale, clr, state, change)
 
         for s in shapes:
             s.rotate_poly(rotation, s.get_clockwise())
             s.update_colour(3)
-            s.scale_poly(scale)
+            s.scale_poly(scale_frac)
 
-        redrawGameWindow(polys, segments, shapes)
+        redrawGameWindow(polys, segments, shapes, sliders, outputs, labels)

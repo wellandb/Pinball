@@ -16,3 +16,6 @@ def main(question):
 
     message = completion.choices[0].message.content
     print(message)
+    file = open("chat_fractal.py", "w")
+    file.write(message)
+    file.close()

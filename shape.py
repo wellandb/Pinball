@@ -70,7 +70,7 @@ class Shape(pygame.sprite.Sprite):
             y = scale * i[1]
             points.append((x,y))
         self.set_points(points)
-        if self.get_area() > 20*20:
+        if self.get_area() > 1000:
             return True
         return False
 
