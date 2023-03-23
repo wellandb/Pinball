@@ -19,8 +19,7 @@ class Button(pygame.sprite.Sprite):
         pygame.draw.rect(window, self.colour, self.rect)
 
     def func(self):
-        self.function()
-        return self.function()
+        return self.function
     
     def check_click(self, mouse):
         if self.rect.collidepoint(mouse):

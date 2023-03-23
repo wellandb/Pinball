@@ -138,7 +138,7 @@ def main(regular, sides, angle, clockwise, depth, scale, clr, state, change):
     # square = Square
     # star = Star
     # polygon = Polygon
-    irregular_shapes = [Star, Irregular]
+    irregular_shapes = [Star, Irregular, Irregular2]
     # shape = pos_shapes[shape % len(pos_shapes)]
     regular_shape = Polygon
     if regular:

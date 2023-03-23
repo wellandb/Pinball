@@ -19,7 +19,7 @@ def redrawGameWindow(bkg,balls,pegs):
 
 
 def main(board):
-    pegs = board
+    pegs = board()
     def mouseClick():
         ballX = mouse[0]
         ballY = mouse[1]
@@ -34,7 +34,12 @@ def main(board):
     # Initialization
     win.fill(BLACK)
 
-    bkg = pygame.image.load("img/neon_L.jpg")
+    if board == boardGeneration.board1:
+        bkg = pygame.image.load("img/neon_L.jpg")
+    elif board == boardGeneration.board2:
+        bkg = pygame.image.load("img/galaxy_fractal.png")
+    elif board == boardGeneration.board3:
+        bkg = pygame.image.load("img/pixel_sky_bkgs/nightbackgroundwithmoon.png")
     bkg_fit = pygame.transform.scale(bkg, (screenWidth,screenHeight))
     win.blit(bkg_fit, (0,0))
 

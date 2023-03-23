@@ -157,7 +157,7 @@ def main(regular, sides, angle, clockwise, depth, scale, clr, state, change):
     clockwise_label.disable()
     clockwise_label.setText("Clockwise:")
 
-    depth_slider = Slider(win, screenWidth-100, 200, 100, 40, min=1, max=30, step=1)
+    depth_slider = Slider(win, screenWidth-100, 200, 100, 40, min=1, max=20, step=1)
     depth_output = TextBox(win, screenWidth-150, 200, 50, 40, fontSize=30, textColour=BLACK)
     depth_label = TextBox(win, screenWidth-300, 200, 150, 40, fontSize=30, textColour=BLACK)
     depth_label.disable()
@@ -194,7 +194,7 @@ def main(regular, sides, angle, clockwise, depth, scale, clr, state, change):
         outputs[i].setText(sliders[i].getValue())
         
     labels = [reg_label, sides_label, angle_label, clockwise_label, depth_label, scale_label, clr_label, state_label, change_label]
-    irregular_shapes = [Star, Irregular]
+    irregular_shapes = [Star, Irregular, Irregular2]
     regular_shape = Polygon
     if regular:
         shape = (True, regular_shape, 3+sides%12)

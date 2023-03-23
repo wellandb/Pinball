@@ -207,3 +207,31 @@ class Polygon(Shape):
             angle = org_angle*i
             self.points.append(self.rotate(radius, angle))
             
+class Irregular2(Shape):
+
+    def __init__(self, colour, sides):
+        super().__init__(colour)
+        if sides < 3 or sides > 13:
+            sides = 3 + sides % 10
+        self.sides = sides
+        self.points = self.base(1)
+        self.base_points = self.base(1)
+        points = self.points
+        self.reflect_poly(90)
+        for i in self.points:
+            points.append(i)
+        self.reflect_poly(180)
+        for i in self.points:
+            points.append(i)
+        self.reflect_poly(270)
+        for i in points:
+            self.points.append(i)
+        
+
+    def base(self, r):
+        pp = []
+        for k in range(self.sides):
+            pp.append((math.sqrt(r*math.sin(2*math.pi*k/10+math.pi/2)**2),math.sqrt(𝑟*(math.cos(2*math.pi*k/10+math.pi/2))**2)))
+            pp.append((math.sqrt(r/2*math.sin(2*math.pi*k/5+math.pi/2)**2),math.sqrt(𝑟/2*(math.cos(2*math.pi*k/5+math.pi/2))**2)))
+            pp.append((math.sqrt(r/4*math.sin(2*math.pi*k/5+math.pi/2)**2),math.sqrt(𝑟/4*(math.cos(2*math.pi*k/5+math.pi/2))**2)))
+        return pp

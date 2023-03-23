@@ -2,7 +2,6 @@ from settings import *
 from peg import *
 
 # Board Generation
-pegs = pygame.sprite.Group()
 
 def drawLine(pegs, number, start, end):
     changeX = int((end[0]-start[0]))/number
@@ -21,6 +20,7 @@ def drawDiamond(p,width, height, x, y):
     drawLine(p, number, [x+width/2, y-height/2], [x, y])
 
 def board1():
+    pegs = pygame.sprite.Group()
     for j in range(5):
         drawLine(pegs, 15-(abs(2-j)*2), [150 + abs(2-j)*50, 200+ 50*j], [screenWidth-(150 + abs(2-j)*50), 200+ 50*j])
     
@@ -28,12 +28,14 @@ def board1():
     return pegs
 
 def board2():
+    pegs = pygame.sprite.Group()
     for i in range(10):
-        for j in range(10):
-            drawLine(pegs, int(screenWidth/50), [20, 100+50*j], [screenWidth-20, 100+50*j])
+        for j in range(8):
+            drawLine(pegs, int(screenWidth/50), [20+10*i%2, 100+50*j], [screenWidth-20-10*i%2, 100+50*j])
     return pegs
 
 def board3():
+    pegs = pygame.sprite.Group()
     width = screenWidth
     height = screenHeight
     for i in range(3):

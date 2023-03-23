@@ -738,7 +738,7 @@ color = (115, 151, 1)
 color_change = 50
 
 # Set the initial depth
-depth = 2
+depth = 5
 
 # Set the initial scale
 scale = 1.25

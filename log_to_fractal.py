@@ -8,7 +8,7 @@ def mean_angle(angles):
 
 def main(line = -1):
     # Query chatgpt
-    chat = True
+    chat = False
     # Route tracker is a text file that stores all the peg locations and ball velocity of every ball and peg collision
     file = open("route_tracker.txt", "r")
     # split into all the different routes
@@ -47,12 +47,12 @@ def main(line = -1):
 
     # regular = True, means that the shape created will be a equillateral polygon
     # regular = False, means that the shape will be chosen from the irregular shapes list
-    if len(pegs) % 2 == 1:
+    if (len(pegs)*3) % 2 == 1:
         regular = False
     else:
         regular = True
     # either the sides of the polygon or the number modulo length of list for irregular shapes
-    shape = 3 + len(pegs) % 10
+    shape = 3 + (len(pegs)**2) % 11
     
 
     # ANGLE
@@ -80,21 +80,21 @@ def main(line = -1):
 
     # COLOUR
     # need to choose 3 numbers from 0-255
-    r = (int(x_avg)^2) % 256
-    g = (int(y_avg)^2) % 256
-    b = (int((x_avg+y_avg)/2)^2) % 256
+    r = (int(x_avg)**2) % 256
+    g = (int(y_avg)**2) % 256
+    b = (int((x_avg+y_avg)/2)**2) % 256
 
     colour = (r, g, b)
         
     # depth
-    # need number from 5 to 20
+    # need number from 5 to 30
     
-    depth = 5 + len(pegs) % 15
+    depth = 3 + len(pegs) % 27
 
     # scale
     # need numnber from 1.05 to 2
     # also needs to be related to depth so large depth has small scale and vice versa
-    scale = 1 + 1/(depth/4)
+    scale = 1 + 1/(depth/3)
 
     state = int(math.sqrt(x_avg**2 + y_avg**2)) % 8
     if state == 0:
@@ -115,7 +115,7 @@ def main(line = -1):
         state = "uuu"
 
     # change needs to be from 4-60
-    change = 10 + int(x_avg**2 * y_avg**2) % 50
+    change = 3 + int(x_avg**2 * y_avg**2) % 58
     
     fractals.main(regular, shape, angle, clockwise, depth, scale, colour, state, change)
 
