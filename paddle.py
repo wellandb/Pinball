@@ -3,6 +3,7 @@ from settings import *
 # Paddle class
 class paddle(pygame.sprite.Sprite):
     
+    # intialize object of paddle
     def __init__(self, x, y, xVel, yVel, maxX, maxY, width, height):
         super().__init__()
         self.xVel = xVel
@@ -16,9 +17,11 @@ class paddle(pygame.sprite.Sprite):
         
         self.rect = pygame.Rect(x,y,width,height)
 
+    # draw paddle
     def draw(self):
         pygame.draw.rect(win, RED, self.rect)
 
+    # move paddle
     def move(self):
         if self.xMove >= self.maxX:
             self.xDir = -1

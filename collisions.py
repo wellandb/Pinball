@@ -1,8 +1,11 @@
+# Importing necessary modules
 from settings import *
 
+# calculate bearing between 2 lines
 def calculate_bearing(lat1, lon1, lat2, lon2):
-    """Calculates the bearing in degrees from (lat1, lon1) to (lat2, lon2)."""
+    #Calculates the bearing in degrees from (lat1, lon1) to (lat2, lon2)
     lat1, lon1, lat2, lon2 = map(math.radians, [lat1, lon1, lat2, lon2])
+    # relative longitude positions
     delta_lon = lon2 - lon1
     y = math.sin(delta_lon) * math.cos(lat2)
     x = math.cos(lat1) * math.sin(lat2) - math.sin(lat1) * math.cos(lat2) * math.cos(delta_lon)
@@ -10,7 +13,7 @@ def calculate_bearing(lat1, lon1, lat2, lon2):
     return (bearing + 360) % 360
 
 def calculate_reflection_angle(ball_velocity, surface_normal):
-    """Calculates the angle of reflection given the velocity of a ball and the surface normal."""
+    #Calculates the angle of reflection given the velocity of a ball and the surface normal.
     # Calculate the angle of incidence
     incidence_angle = math.atan2(ball_velocity[1], ball_velocity[0])
     
@@ -32,46 +35,59 @@ def ballPegCollision(ball, pegs):
             # Work out angle of incident and deflection using lines through the circles
             ballx = ball.rect.x
             bally = ball.rect.y 
+            # calculate bearing between ball and the peg
             angle = calculate_bearing(ballx, bally, i.rect.x, i.rect.y)
-            print(angle)
+            # work out approximate location
             if ball.xVel > 0:
                 if ball.yVel > 0:
-                    print("approx top right")
+                    pass
+                    # print("approx top right")
                 else:
-                    print("approx bottom right")
+                    pass
+                    # print("approx bottom right")
             else:
                 if ball.yVel > 0:
-                    print("approx top left")
+                    pass
+                    # print("approx top left")
                 else:
-                    print("approx bottom left")
+                    pass
+                    # print("approx bottom left")
                 
             if angle <= 30 or angle >= 330:
-                print("left")
+                pass
+                # print("left")
                 pass # Ball from on top
             elif angle < 90:
-                print("top left")
+                pass
+                # print("top left")
                 pass # ball from top right
             elif angle == 90: # ball from the right
-                print("top")
-                ball.xVel *= -1
+                pass
+                # ball.xVel *= -1
+                # print("top")
             elif angle < 150:
-                print("top right")
+                pass
+                # print("top right")
                 pass # ball from bottom right
             elif angle <= 210:
-                print("bottom right")
+                pass
+                # print("bottom right")
                 pass # ball from bottom
             elif angle < 270:
-                print("bottom")
+                pass
+                # print("bottom")
                 pass # ball from bottom left
             elif angle == 270: # Ball from the left
-                print("bottom")
-                ball.xVel *= -1
+                pass
+                # ball.xVel *= -1
+                # print("bottom")
             elif angle < 330:
-                print("bottom left")
+                pass
+                # print("bottom left")
                 pass # top left
 
 
-            
+            # work out relative location and then log the result and change the relavent velocity 
             if (ballx < i.rect.x and ball.xVel > 0) or (ballx > i.rect.x and ball.xVel < 0):
                 log = log + str(i.rect.x) + " " + str(i.rect.y) + " " +  str(round(ball.xVel,3)) + " " +  str(round(ball.yVel,3)) + " "
                 ball.xVel = ball.xVel * (-1)       # CHANGE xVel and yVel depending on positions
@@ -84,16 +100,18 @@ def ballPegCollision(ball, pegs):
     # return string of peg collisions and velcity for fractal
     return log
  
-
+# function to work out the ball and wall collisions
 def ballWallCollision(balls):
     for i in balls:
+        # bounce off all walls by negating the relavent velocity depending on the wall
         if i.rect.x <= 0:
             if i.xVel < 0:
                 i.xVel = i.xVel * (-1)
         elif i.rect.x >= screenWidth:
             if i.xVel > 0:
                 i.xVel = i.xVel * (-1)
-        if i.rect.y >= screenHeight:
+        # if the ball hits the bottom of the screen then kill it and return true to delete it from the ball list
+        if i.rect.y >= screenHeight: 
             i.kill()
             return True
         elif i.rect.y <= 0:
@@ -101,5 +119,6 @@ def ballWallCollision(balls):
                 i.yVel = i.yVel * (-1)
     return False
 
+# ball paddle collisions
 def ballPaddleCollision():
     pass

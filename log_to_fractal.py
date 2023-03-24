@@ -1,6 +1,8 @@
+# Importing necessary modules
 from settings import *
 import fractals
 import chatgpt_query
+import chat_api
 
 # Works out the mean angle out of a list of angles
 def mean_angle(angles):
@@ -8,7 +10,7 @@ def mean_angle(angles):
 
 def main(line = -1):
     # Query chatgpt
-    chat = False
+    chat = chat_api.query_chat
     # Route tracker is a text file that stores all the peg locations and ball velocity of every ball and peg collision
     file = open("route_tracker.txt", "r")
     # split into all the different routes
@@ -96,6 +98,8 @@ def main(line = -1):
     # also needs to be related to depth so large depth has small scale and vice versa
     scale = 1 + 1/(depth/3)
 
+    # works out the state by creating a binary 3 bit number with 0=d and 1=u
+    # The state will be used to work out the direction of change for the r,g,b values
     state = int(math.sqrt(x_avg**2 + y_avg**2)) % 8
     if state == 0:
             state = "ddd"
@@ -117,29 +121,34 @@ def main(line = -1):
     # change needs to be from 4-60
     change = 3 + int(x_avg**2 * y_avg**2) % 58
     
+    # calls the fractal creation with the parameters worked out
     fractals.main(regular, shape, angle, clockwise, depth, scale, colour, state, change)
 
-    # Create the call to chat gpt to create a fractal
+    # Create the call to chat gpt to create a fractal and store it in a text file to be sent
     chatgpt = open("to_chat.txt", 'a')
 
+    # Create the query to give to chat gpt based of the parameters I have worked 
     if regular:
-        reg = "using equillateral polygons with sides greater than 2 "
+        reg = "using equillateral polygons with sides " + str(shape)
     else:
         reg = "using irregular shapes "
+    # rotation of fractal for the query
     if clockwise:
         clk = "rotating " + str(angle) + " clockwise "
     else:
         clk = "rotating " + str(angle) + " anticlockwise "
     
     # I am going to decrease depth as it often causes it not to run as it takes too long
-    d = " with depth " + str(depth%8)
-    s = " with scale " + str(scale)
-    cl = " using the colour " + str(colour) 
-    ch = " and changing the colour values by " + str(change%10) + " while moduloing the values by 255 so that it is a valid colour" # this isn't added right now as chatgpt often forgets to mod by 255 causing it to not run
-    question = "Create a fractal in pygame " + reg + clk + d + s + cl +ch+ '\n'
-    chatgpt.write(question)
-    chatgpt.close()
+    d = " with depth " + str(depth%8) # depth of fractal
+    s = " with scale " + str(scale) # scale of fractal
+    cl = " using the colour " + str(colour) # color of fractal
+    # change of the colour values for each repeated set
+    ch = " and changing the colour values by " + str(change%10) + " while moduloing the values by 255 so that it is a valid colour" # chatgpt often forgets to mod by 255 causing it to not run
+    question = "Create a fractal in pygame " + reg + clk + d + s + cl +ch+ '\n' # form the question for chat gpt
+    chatgpt.write(question) # write the question into the file
+    chatgpt.close() # close the file
     
+    # query chat gpt with the fractal question formed
     if chat:
         chatgpt_query.main(question)
 

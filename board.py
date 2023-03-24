@@ -1,4 +1,4 @@
-#Peg generation
+# Importing necessary modules
 from settings import *
 from peg import *
 

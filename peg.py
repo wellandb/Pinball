@@ -1,8 +1,10 @@
+# Import necessary modules
 from settings import *
 
 # Peg class
 class peg(pygame.sprite.Sprite):
     
+    # Intialize objects
     def __init__(self, x, y, radius, colour):
         super().__init__()
         self.rect = pygame.Rect(x,y, 7, 7)
@@ -40,6 +42,6 @@ class peg(pygame.sprite.Sprite):
             normal = (normal[0]/length, normal[1]/length)
             self.normals.append(normal)
 
-
-    def draw(self):
+    # draw the peg on the window
+    def draw(self, win):
         pygame.draw.circle(win, self.colour ,[self.rect.x + self.radius/2,self.rect.y+ self.radius/2], self.radius)

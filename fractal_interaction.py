@@ -1,15 +1,19 @@
+# Importing necessary modules
 from settings import *
 from shape import *
 import pygame_widgets
 from pygame_widgets.slider import Slider
 from pygame_widgets.textbox import TextBox
 
+# Function to convert the coordinates to pixel values
 def to_pixels(x,y):
     return(screenWidth/2 + screenWidth * x/20, screenHeight/2 - screenHeight * y/20)
 
+# Function to convert the pixel values to coordinates
 def from_pixels(x, y):
     return(20*x/screenWidth - 10, 10 - 20 * y/screenHeight)
 
+# draw the grid on the window
 def draw_grid(win):
     for x in range(-9,10):
         draw_segment(win, (x,-10), (x,10), LIGHT_GRAY)
@@ -20,6 +24,8 @@ def draw_grid(win):
     draw_segment(win, (-10,0), (10,0), DARK_GRAY)
     draw_segment(win, (0,-10), (0,10), DARK_GRAY)
     
+# Function to create a random state for the colour update values
+# binary 3 bit number where 1="u" or up and 0="d" or down, the location of the state is equal to the r,g,b value change direction
 def random_state():
     s = ""
     for i in range(3):
@@ -29,18 +35,22 @@ def random_state():
             s += "d"
     return s
 
+# draw a polygon given a list of verticies
 def draw_poly(win, pp, colour, state=random_state()):
     pixel_points = [to_pixels(x,y) for x,y in pp]
     pygame.draw.polygon(win, colour, pixel_points)
     return [colour, pp, state]
 
+# draw a line segment
 def draw_segment(win, v1, v2, colour):
     pygame.draw.line(win, colour, to_pixels(*v1), to_pixels(*v2), 2)
     return [colour, v1, v2]
 
+# create a random colour
 def random_colour():
     return (random.randint(0,255),random.randint(0,255),random.randint(0,255))
 
+# update colour values based off of state
 def update_colour(colour, change, state):
     # make sure no number goes out of index
     for i in range(3):
@@ -66,6 +76,7 @@ def update_colour(colour, change, state):
     return (r, g, b)
     
 
+# get area of a polygon
 def Area(poly):
     corners = poly[1]
     n = len(corners) # of corners
@@ -77,6 +88,7 @@ def Area(poly):
     area = abs(area) / 2.0
     return area
 
+# create a fractal out of a shape with the given parameters
 def create_fractal(shape, angle, clockwise, depth, scale, colour, state, change):
     fractal = []
     regular, frac_shape, sides = shape[0], shape[1], shape[2]
@@ -105,7 +117,7 @@ def create_fractal(shape, angle, clockwise, depth, scale, colour, state, change)
         clk = not(clk)
     return fractal
 
-
+# redraw the game window and update the screen
 def redrawGameWindow(polys, segments, shapes, sliders, outputs, labels):
     win.fill(WHITE)
     draw_grid(win)
@@ -116,6 +128,7 @@ def redrawGameWindow(polys, segments, shapes, sliders, outputs, labels):
         draw_poly(win, poly[1], poly[0])
     # To make it look better
     win.fill(BLACK)
+    # sort the shapes by area with largest drawn first so you can see the smaller shapes
     shapes.sort(reverse= True, key=lambda x: x.get_area())
     for shape in shapes:
         shape.draw(win)
@@ -128,16 +141,20 @@ def redrawGameWindow(polys, segments, shapes, sliders, outputs, labels):
     pygame_widgets.update(pygame.event.get())
     pygame.display.update()
 
-
+# main function that creates the fractal interaction
 def main(regular, sides, angle, clockwise, depth, scale, clr, state, change):
     segments = []
     polys = []
     shapes = []
+    # slider and textbox intialises 
+    # sliders equate to the parameters of the create fractal function
+    # outputs are the current value of the sliders
+    # labels are the names of the parameters that the sliders are changing
     reg_slider = Slider(win, screenWidth-100, 0, 100, 40, min=0, max=1, step=1)
     reg_output = TextBox(win, screenWidth-150, 0, 50, 40, fontSize=30, textColour=BLACK)
     reg_label = TextBox(win, screenWidth-300, 0, 150, 40, fontSize=30, textColour=BLACK)
-    reg_label.disable()
-    reg_label.setText("Equillateral:")
+    reg_label.disable() # disable so it only acts as a label rather than something to type text into
+    reg_label.setText("Equillateral:") # set label of slider
 
     sides_slider = Slider(win, screenWidth-100, 50, 100, 40, min=0, max=20, step=1)
     sides_output = TextBox(win, screenWidth-150, 50, 50, 40, fontSize=30, textColour=BLACK)
@@ -187,6 +204,7 @@ def main(regular, sides, angle, clockwise, depth, scale, clr, state, change):
     change_label.disable()
     change_label.setText("Gradient:")
 
+    # create the lists to store the sliders, outputs and labels
     sliders = [reg_slider, sides_slider, angle_slider, clockwise_slider, depth_slider, scale_slider, clr_slider, state_slider, change_slider]
     outputs = [reg_output, sides_output, angle_output, clockwise_output, depth_output, scale_output, clr_output, state_output, change_output]
     for i in range(len(outputs)):
@@ -194,7 +212,8 @@ def main(regular, sides, angle, clockwise, depth, scale, clr, state, change):
         outputs[i].setText(sliders[i].getValue())
         
     labels = [reg_label, sides_label, angle_label, clockwise_label, depth_label, scale_label, clr_label, state_label, change_label]
-    irregular_shapes = [Star, Irregular, Irregular2]
+    # shape lists store the possible shapes to be drawn
+    irregular_shapes = [Star, Irregular, Irregular2, Irregular3]
     regular_shape = Polygon
     if regular:
         shape = (True, regular_shape, 3+sides%12)
