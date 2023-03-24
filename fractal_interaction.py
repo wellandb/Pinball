@@ -247,6 +247,7 @@ def main(regular, sides, angle, clockwise, depth, scale, clr, state, change):
         else:
             scale_frac = 1
 
+        # get values from sliders, print to textbox and then update fractal when space pressed
         regular = reg_slider.getValue()
         reg_output.setText(regular)
 
@@ -304,6 +305,7 @@ def main(regular, sides, angle, clockwise, depth, scale, clr, state, change):
             scale = 1 + 1/(depth/4)
             shapes = create_fractal(shape, angle, clockwise, depth, scale, clr, state, change)
 
+        # rotate and update colour of fractal
         for s in shapes:
             s.rotate_poly(rotation, s.get_clockwise())
             s.update_colour(3)
