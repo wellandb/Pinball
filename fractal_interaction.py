@@ -214,11 +214,13 @@ def main(regular, sides, angle, clockwise, depth, scale, clr, state, change):
     labels = [reg_label, sides_label, angle_label, clockwise_label, depth_label, scale_label, clr_label, state_label, change_label]
     # shape lists store the possible shapes to be drawn
     irregular_shapes = [Star, Irregular, Irregular2, Irregular3]
+    # irregular_shapes = [Irregular3]
     regular_shape = Polygon
     if regular:
         shape = (True, regular_shape, 3+sides%12)
     else:
         shape = (False, irregular_shapes[sides%len(irregular_shapes)], sides)
+
 
     angle = 20
     clockwise = True

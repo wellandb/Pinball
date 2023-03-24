@@ -160,7 +160,8 @@ def main(regular, sides, angle, clockwise, depth, scale, clr, state, change):
         shape = (True, regular_shape, 3+sides%7)
     else:
         shape = (False, irregular_shapes[sides%len(irregular_shapes)], sides)
-
+        # if irregular_shapes[sides%len(irregular_shapes)] == Irregular3:
+        #     depth = depth % 11
     # creates the fractal and stores it in shapes
     shapes = create_fractal(shape, angle, clockwise, depth, scale, clr, state, change)
     # shapes = create_fractal(star, 20, True, 10, 1.2, (146, 231, 56), 'udu', 3)

@@ -54,7 +54,7 @@ def main(line = -1):
     else:
         regular = True
     # either the sides of the polygon or the number modulo length of list for irregular shapes
-    shape = 3 + (len(pegs)**2) % 11
+    shape = 3 + (len(pegs)**2 -2*len(pegs) +13) % 11
     
 
     # ANGLE
@@ -82,21 +82,21 @@ def main(line = -1):
 
     # COLOUR
     # need to choose 3 numbers from 0-255
-    r = (int(x_avg)**2) % 256
-    g = (int(y_avg)**2) % 256
-    b = (int((x_avg+y_avg)/2)**2) % 256
+    r = (int(x_avg)**2 - 2*y_avg) % 256
+    g = (int(y_avg)**2 + 3*x_avg) % 256
+    b = (int((x_avg+y_avg)/2)**2 +7*x_avg +3*y_avg) % 256
 
     colour = (r, g, b)
         
     # depth
-    # need number from 5 to 30
+    # need number from 5 to 20
     
-    depth = 3 + len(pegs) % 27
+    depth = 3 + (len(pegs)**2 + len(pegs)*7 + 11) % 18
 
     # scale
     # need numnber from 1.05 to 2
     # also needs to be related to depth so large depth has small scale and vice versa
-    scale = 1 + 1/(depth/3)
+    scale = 1 + 1/(depth/4)
 
     # works out the state by creating a binary 3 bit number with 0=d and 1=u
     # The state will be used to work out the direction of change for the r,g,b values
