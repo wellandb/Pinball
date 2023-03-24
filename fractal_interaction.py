@@ -180,38 +180,38 @@ def main(regular, sides, angle, clockwise, depth, scale, clr, state, change):
     depth_label.disable()
     depth_label.setText("Depth:")
 
-    scale_slider = Slider(win, screenWidth-100, 250, 100, 40, min=1, max=2, step=0.1)
-    scale_output = TextBox(win, screenWidth-150, 250, 50, 40, fontSize=30, textColour=BLACK)
-    scale_label = TextBox(win, screenWidth-300, 250, 150, 40, fontSize=30, textColour=BLACK)
-    scale_label.disable()
-    scale_label.setText("Scale:")
+    # scale_slider = Slider(win, screenWidth-100, 250, 100, 40, min=1, max=2, step=0.1)
+    # scale_output = TextBox(win, screenWidth-150, 250, 50, 40, fontSize=30, textColour=BLACK)
+    # scale_label = TextBox(win, screenWidth-300, 250, 150, 40, fontSize=30, textColour=BLACK)
+    # scale_label.disable()
+    # scale_label.setText("Scale:")
 
-    clr_slider = Slider(win, screenWidth-100, 300, 100, 40, min=0, max=255, step=1)
-    clr_output = TextBox(win, screenWidth-150, 300, 50, 40, fontSize=10, textColour=BLACK)
-    clr_label = TextBox(win, screenWidth-300, 300, 150, 40, fontSize=30, textColour=BLACK)
+    clr_slider = Slider(win, screenWidth-100, 250, 100, 40, min=0, max=255, step=1)
+    clr_output = TextBox(win, screenWidth-150, 250, 50, 40, fontSize=10, textColour=BLACK)
+    clr_label = TextBox(win, screenWidth-300, 250, 150, 40, fontSize=30, textColour=BLACK)
     clr_label.disable()
     clr_label.setText("Colour:")
 
-    state_slider = Slider(win, screenWidth-100, 350, 100, 40, min=0, max=7, step=1)
-    state_output = TextBox(win, screenWidth-150, 350, 50, 40, fontSize=30, textColour=BLACK)
-    state_label = TextBox(win, screenWidth-300, 350, 150, 40, fontSize=30, textColour=BLACK)
+    state_slider = Slider(win, screenWidth-100, 300, 100, 40, min=0, max=7, step=1)
+    state_output = TextBox(win, screenWidth-150, 300, 50, 40, fontSize=30, textColour=BLACK)
+    state_label = TextBox(win, screenWidth-300, 300, 150, 40, fontSize=30, textColour=BLACK)
     state_label.disable()
     state_label.setText("RGB Change:")
 
-    change_slider = Slider(win, screenWidth-100, 400, 100, 40, min=1, max=99, step=1)
-    change_output = TextBox(win, screenWidth-150, 400, 50, 40, fontSize=30, textColour=BLACK)
-    change_label = TextBox(win, screenWidth-300, 400, 150, 40, fontSize=30, textColour=BLACK)
+    change_slider = Slider(win, screenWidth-100, 350, 100, 40, min=1, max=99, step=1)
+    change_output = TextBox(win, screenWidth-150, 350, 50, 40, fontSize=30, textColour=BLACK)
+    change_label = TextBox(win, screenWidth-300, 350, 150, 40, fontSize=30, textColour=BLACK)
     change_label.disable()
     change_label.setText("Gradient:")
 
     # create the lists to store the sliders, outputs and labels
-    sliders = [reg_slider, sides_slider, angle_slider, clockwise_slider, depth_slider, scale_slider, clr_slider, state_slider, change_slider]
-    outputs = [reg_output, sides_output, angle_output, clockwise_output, depth_output, scale_output, clr_output, state_output, change_output]
+    sliders = [reg_slider, sides_slider, angle_slider, clockwise_slider, depth_slider,  clr_slider, state_slider, change_slider] # scale_slider,
+    outputs = [reg_output, sides_output, angle_output, clockwise_output, depth_output,  clr_output, state_output, change_output] #scale_output,
     for i in range(len(outputs)):
         outputs[i].disable()
         outputs[i].setText(sliders[i].getValue())
         
-    labels = [reg_label, sides_label, angle_label, clockwise_label, depth_label, scale_label, clr_label, state_label, change_label]
+    labels = [reg_label, sides_label, angle_label, clockwise_label, depth_label,  clr_label, state_label, change_label] # scale_label,
     # shape lists store the possible shapes to be drawn
     irregular_shapes = [Star, Irregular, Irregular2, Irregular3]
     # irregular_shapes = [Irregular3]
@@ -262,8 +262,8 @@ def main(regular, sides, angle, clockwise, depth, scale, clr, state, change):
         depth = depth_slider.getValue()
         depth_output.setText(depth)
 
-        scale = scale_slider.getValue()
-        scale_output.setText(scale)
+        # scale = scale_slider.getValue()
+        # scale_output.setText(scale)
 
         clr = (clr_slider.getValue(),clr_slider.getValue(),clr_slider.getValue())
         clr_output.setText(clr)
@@ -301,6 +301,7 @@ def main(regular, sides, angle, clockwise, depth, scale, clr, state, change):
         
 
         if keys[pygame.K_SPACE]:
+            scale = 1 + 1/(depth/4)
             shapes = create_fractal(shape, angle, clockwise, depth, scale, clr, state, change)
 
         for s in shapes:
